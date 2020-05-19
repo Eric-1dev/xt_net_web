@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task_1_1_2 // Triangle
+namespace Task_1_1_3 // Another triangle
 {
     class Program
     {
@@ -12,17 +12,21 @@ namespace Task_1_1_2 // Triangle
         {
             string str;
             byte n;
-            Console.Write("Введите N = ");
+            Console.Write("Введите N ");
             str = Console.ReadLine();
-            Byte.TryParse(str, out n);
+            byte.TryParse(str, out n);
             if ( n > 100 )
             {
                 Console.WriteLine("Многовато будет");
-                return;
             }
-            for (byte i = 0; i < n; i++)
+
+            for ( byte i = 0; i < n; i++ )
             {
-                for (byte j = 0; j < i + 1; j++)
+                for ( byte j = 0; j < n - i; j++ )
+                {
+                    Console.Write(" ");
+                }
+                for (byte j = 0; j < 2*i + 1; j++)
                 {
                     Console.Write("*");
                 }
