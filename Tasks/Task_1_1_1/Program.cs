@@ -10,15 +10,15 @@ namespace Task_1_1_1
     {
         static void Main(string[] args)
         {
-            string a_str, b_str;
-            Int16 a, b;
+            string str; // Временная переменная, для хранения считанной строки
+            Int16 a, b; // Габариты прямоугольника
             Console.Write("Расчет площади прямоугольника:\na = ");
-            a_str = Console.ReadLine();
-            Int16.TryParse(a_str, out a);
+            str = Console.ReadLine();
+            Int16.TryParse(str, out a); // Парсим строку в int16, игнорируя возращаемое значение метода, т.к. по условию задачи вводятся только числа
             Console.Write("b = ");
-            b_str = Console.ReadLine();
-            Int16.TryParse(b_str, out b);
-            if ( a <= 0 || b <= 0 )
+            str = Console.ReadLine();
+            Int16.TryParse(str, out b);
+            if ( a <= 0 || b <= 0 ) // Вылетаем, если значения не удовлетворяют условию
             {
                 Console.WriteLine("Введены некорректные значения длины и ширины");
                 return;
