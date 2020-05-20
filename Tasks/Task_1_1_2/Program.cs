@@ -12,14 +12,20 @@ namespace Task_1_1_2 // Triangle
         {
             string str;
             byte n;
-            Console.Write("Введите N = ");
-            str = Console.ReadLine();
-            Byte.TryParse(str, out n);
-            if ( n > 100 )
+            const byte MAX_N = 50;
+
+            do
             {
-                Console.WriteLine("Многовато будет");
-                return;
+                Console.Write("Введите N ");
+                str = Console.ReadLine();
+                byte.TryParse(str, out n);
+                if (n > MAX_N)
+                    Console.WriteLine("Многовато будет");
+                if (n < 1)
+                    Console.WriteLine("Маловато будет");
             }
+            while (n > MAX_N || n < 1);
+
             for (byte i = 0; i < n; i++)
             {
                 for (byte j = 0; j < i + 1; j++)
@@ -28,7 +34,6 @@ namespace Task_1_1_2 // Triangle
                 }
                 Console.WriteLine();
             }
-            return;
         }
     }
 }
