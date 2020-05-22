@@ -25,9 +25,8 @@ namespace Task_1_1_7
 
             Random rnd = new Random();
 
-            for (byte i = 0; i < arr.Length; i++) // Заполняем массив случайными числами
+            for (byte i = 0; i < n; i++) // Заполняем массив случайными числами
                 arr[i] = (sbyte) rnd.Next(-127, 128);
-            rnd = null; // Не уверен надо ли это, но написал new - пиши delete :)
 
             printArr(arr); // Выводим получившийся массив
 

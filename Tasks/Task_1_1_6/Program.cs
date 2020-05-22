@@ -13,6 +13,7 @@ namespace Task_1_1_6 // FONT ADJUSTMENT
             char c_key;
             byte key = 9;
             FontStyles textParam = 0;
+
             while ( key != 0 )
             {
                 Console.Write("Параметры надписи: " + textParam);
