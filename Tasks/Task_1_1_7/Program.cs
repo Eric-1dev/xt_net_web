@@ -67,7 +67,7 @@ namespace Task_1_1_7
         {
             T swap;
             // Сортируем пузирьком
-            for ( uint i = 0; i < array.Length; i++ )
+            for ( uint i = 0; i < array.Length - 1; i++ )
                 for ( uint j = 0; j < (uint)array.Length - i - 1; j++)
                     if ( array[j].CompareTo(array[j + 1]) > 0 )
                     {
