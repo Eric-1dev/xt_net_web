@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace Task_1_1_8 // NO POSITIVE
 {
@@ -28,7 +29,7 @@ namespace Task_1_1_8 // NO POSITIVE
                         arr[i, j , k] = rnd.Next(-1000, 1000);
 
             Console.WriteLine("-------- Исходный массив: --------");
-            printArr(arr, ref n, ref n, ref n);
+            myArray.printArr(arr, n, n, n);
 
             // Пробегаемся по массиву и заменяем положительные элементы нулями
             for (uint i = 0; i < n; i++)
@@ -38,26 +39,7 @@ namespace Task_1_1_8 // NO POSITIVE
                             arr[i, j, k] = 0;
 
             Console.WriteLine("-------- Новый массив: --------");
-            printArr(arr, ref n, ref n, ref n);
-        }
-
-        // Вывод трехмерного массива размерностью x y z, в виде z таблиц размером x * y
-        // Метод универсальный, для массивов разных типов и размерностей. Все переменные передаем
-        // ссылками, чтобы не плодить одинаковые данные в памяти.
-        static void printArr<T>(T[,,] array, ref uint x, ref uint y, ref uint z)
-        {
-            for (int i = 0; i < z; i++)
-            {
-                for (int j = 0; j < y; j++)
-                {
-                    for (int k = 0; k < x; k++)
-                    {
-                        Console.Write(array[i, j, k] + "\t");
-                    }
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
-            }
-        }
+            myArray.printArr(arr, n, n, n);
+        }        
     }
 }

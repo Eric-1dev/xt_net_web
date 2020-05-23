@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace Task_1_1_9 // NON-NEGATIVE SUM
 {
@@ -30,18 +31,10 @@ namespace Task_1_1_9 // NON-NEGATIVE SUM
                     sum += (UInt16)arr[i];
             }
 
-            printArr(arr); // Выводим получившийся массив
+            
+            myArray.printArr(arr); // Выводим получившийся массив
 
             Console.WriteLine("Сумма неотрицательных элементов равна: " + sum);
-        }
-
-        static void printArr<T>(T[] array)
-        {
-            foreach (var elem in array)
-            {
-                Console.Write(elem + " ");
-            }
-            Console.WriteLine();
         }
     }
 }

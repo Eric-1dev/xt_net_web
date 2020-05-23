@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{11A04B8F-5458-4981-8695-2A68EF71B7FB}</ProjectGuid>
+    <ProjectGuid>{4DE76715-1384-47F8-8DAC-87AF4D1336A4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Task_1_1_9</RootNamespace>
-    <AssemblyName>Task_1_1_9</AssemblyName>
+    <RootNamespace>Task_1_1_10</RootNamespace>
+    <AssemblyName>Task_1_1_10</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

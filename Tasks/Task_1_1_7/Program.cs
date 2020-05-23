@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using Common;
 
 namespace Task_1_1_7 // ARRAY PROCESSING
 {
@@ -28,7 +29,7 @@ namespace Task_1_1_7 // ARRAY PROCESSING
             for (byte i = 0; i < n; i++) // Заполняем массив случайными числами
                 arr[i] = (sbyte) rnd.Next(-127, 128);
 
-            printArr(arr); // Выводим получившийся массив
+            myArray.printArr(arr); // Выводим получившийся массив
 
             minMax<sbyte>(out min, out max, arr);  // Находим минимальное и максимальное значение
 
@@ -37,21 +38,28 @@ namespace Task_1_1_7 // ARRAY PROCESSING
 
             sortArr(arr); // Сортируем
 
-            printArr(arr); // Снова выводим
+            myArray.printArr(arr); // Снова выводим
         }
 
-        // Т.к. выводить массив придется 2 раза - логичней обернуть эту операцию в метод
-        static void printArr<T>(T[] array)
+        /*
+         * Скучно писать только под sbyte. Напишем универсальный метод под разные типы числовых значений
+         * Насколько я понимаю, "where T : IComparable<T>" - это как раз то, что по условию использовать запрещено,
+         * поэтому выложу код без использования where, но под конкретный тип данных.
+         */
+
+        /*
+        static void minMax(out sbyte minVal, out sbyte maxVal, sbyte[] array)
         {
+            maxVal = minVal = array[0];
             foreach (var elem in array)
             {
-                Console.Write(elem + " ");
+                if (maxVal.CompareTo(elem) < 0) maxVal = elem;
+                if (minVal.CompareTo(elem) > 0) minVal = elem;
             }
-            Console.WriteLine();
         }
+        */
 
-        // Скучно писать только под sbyte. Напишем универсальный метод под разные типы числовых значений
-        static void minMax<T>(out T minVal, out T maxVal, T[] array) where T: IComparable<T>
+        static void minMax<T>(out T minVal, out T maxVal, T[] array) where T : IComparable<T>
         {
             maxVal = minVal = array[0];
             foreach (var elem in array)
