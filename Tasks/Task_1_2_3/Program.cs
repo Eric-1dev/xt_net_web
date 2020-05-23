@@ -18,7 +18,7 @@ namespace Task_1_2_3
             {
                 if ( elem.Length > 0 )
                 {
-                    if (Char.IsLower(elem[0]))
+                    if (char.IsLetter(elem[0]) && char.IsLower(elem[0]))
                         count++;
                 }
             }
