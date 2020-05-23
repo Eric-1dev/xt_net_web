@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task_1_1_5
+namespace Task_1_1_5 // SUM OF NUMBERS
 {
-    class Program // SUM OF NUMBERS
+    class Program
     {
         static void Main(string[] args)
         {

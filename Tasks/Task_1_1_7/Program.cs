@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
 
-namespace Task_1_1_7
+namespace Task_1_1_7 // ARRAY PROCESSING
 {
     class Program
     {
@@ -41,7 +41,7 @@ namespace Task_1_1_7
         }
 
         // Т.к. выводить массив придется 2 раза - логичней обернуть эту операцию в метод
-        static void printArr(sbyte[] array)
+        static void printArr<T>(T[] array)
         {
             foreach (var elem in array)
             {

@@ -28,7 +28,7 @@ namespace Task_1_1_8 // NO POSITIVE
                         arr[i, j , k] = rnd.Next(-1000, 1000);
 
             Console.WriteLine("-------- Исходный массив: --------");
-            printArr<int>(arr, ref n, ref n, ref n);
+            printArr(arr, ref n, ref n, ref n);
 
             // Пробегаемся по массиву и заменяем положительные элементы нулями
             for (uint i = 0; i < n; i++)
@@ -38,7 +38,7 @@ namespace Task_1_1_8 // NO POSITIVE
                             arr[i, j, k] = 0;
 
             Console.WriteLine("-------- Новый массив: --------");
-            printArr<int>(arr, ref n, ref n, ref n);
+            printArr(arr, ref n, ref n, ref n);
         }
 
         // Вывод трехмерного массива размерностью x y z, в виде z таблиц размером x * y
