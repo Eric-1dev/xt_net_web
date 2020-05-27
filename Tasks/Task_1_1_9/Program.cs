@@ -32,7 +32,7 @@ namespace Task_1_1_9 // NON-NEGATIVE SUM
             }
 
             
-            myArray.printArr(arr); // Выводим получившийся массив
+            myArray.printArr<sbyte>(arr); // Выводим получившийся массив
 
             Console.WriteLine("Сумма неотрицательных элементов равна: " + sum);
         }

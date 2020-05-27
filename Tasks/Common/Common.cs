@@ -6,46 +6,49 @@ using System.Threading.Tasks;
 
 namespace Common
 {
+    
     static public class myArray
     {
-        // Вывод одномерного массива
-        static public void printArr<T>(T[] array)
+        // Прошу прощения, что редактирую задание после дэдлайна, но после сегодняшнего урока
+        // нашел способ применить более красивое, как мне кажется, решение.
+        // Принципиально оно ничего не меняет, но сокращает код.
+        // Кажется начинаю привыкать к отсутствию указателей :)
+        // Очень хочется тут применить switch-case, вместо if'ов, но не придумал как.
+        static public void printArr<T>(object array, uint x = 0, uint y = 0, uint z = 0)
         {
-            foreach (var elem in array)
+            if ( array is T[] ) // Одномерный массив
             {
-                Console.Write(elem + " ");
-            }
-            Console.WriteLine();
-        }
-
-        // Вывод двухмерного массива
-        static public void printArr<T>(T[,] array, uint x, uint y)
-        {
-            for (int i = 0; i < x; i++)
-            {
-                for (int j = 0; j < y; j++)
+                foreach (var elem in array as T[])
                 {
-                    Console.Write(array[i, j] + " ");
+                    Console.Write(elem + " ");
                 }
                 Console.WriteLine();
             }
-        }
-
-        // Вывод трехмерного массива размерностью x y z, в виде x таблиц размером z * y
-        // Метод универсальный, для массивов разных типов и размерностей.
-        static public void printArr<T>(T[,,] array, uint x, uint y, uint z)
-        {
-            for (int i = 0; i < x; i++)
+            else if ( array is T[,] ) // двухмерный массив
             {
-                for (int j = 0; j < y; j++)
+                for (int i = 0; i < x; i++)
                 {
-                    for (int k = 0; k < z; k++)
+                    for (int j = 0; j < y; j++)
                     {
-                        Console.Write(array[i, j, k] + "\t");
+                        Console.Write((array as T[,])[i, j] + " ");
                     }
                     Console.WriteLine();
                 }
-                Console.WriteLine();
+            }
+            else if ( array is T[,,] ) // трехмерный массив
+            {
+                for (int i = 0; i < x; i++)
+                {
+                    for (int j = 0; j < y; j++)
+                    {
+                        for (int k = 0; k < z; k++)
+                        {
+                            Console.Write((array as T[,,])[i, j, k] + "\t");
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
             }
         }
     }

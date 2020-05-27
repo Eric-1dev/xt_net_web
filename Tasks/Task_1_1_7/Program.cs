@@ -29,7 +29,7 @@ namespace Task_1_1_7 // ARRAY PROCESSING
             for (byte i = 0; i < n; i++) // Заполняем массив случайными числами
                 arr[i] = (sbyte) rnd.Next(-127, 128);
 
-            myArray.printArr(arr); // Выводим получившийся массив
+            myArray.printArr<sbyte>(arr); // Выводим получившийся массив
 
             minMax<sbyte>(out min, out max, arr);  // Находим минимальное и максимальное значение
 
@@ -38,7 +38,7 @@ namespace Task_1_1_7 // ARRAY PROCESSING
 
             sortArr(arr); // Сортируем
 
-            myArray.printArr(arr); // Снова выводим
+            myArray.printArr<sbyte>(arr); // Снова выводим
         }
 
         /*
