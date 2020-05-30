@@ -30,7 +30,7 @@ namespace Eric.String
         // Конструктор, формирующий нашу строку из массива символов
         public MyString(char[] arr)
         {
-            // this->MyString(arr.Length); // Так почему-то нельзя, поэтому придется сделать вспомогательный метод _init
+             // MyString(arr.Length); // Так почему-то нельзя, поэтому придется сделать вспомогательный метод _init
             _init(arr.Length);
             for (int i = 0; i < arr.Length; i++)
             {
@@ -53,6 +53,18 @@ namespace Eric.String
         {
             _init(str.Length);
             for (int i = 0; i < str.Length; i++)
+            {
+                _string[i] = str[i];
+            }
+        }
+
+        // Конструируем нашу строку из MyString с указанной позиции, указанной длины
+        public MyString(MyString str, int index, int length)
+        {
+            if (length > str.Length)
+                length = str.Length;
+            _init(length);
+            for (int i = index; i < i + length; i++)
             {
                 _string[i] = str[i];
             }
@@ -177,6 +189,16 @@ namespace Eric.String
             return -1;
         }
 
+        // Поиск последнего индекса символа. Возращает индекс поледнего символа в строке или -1, если его нет
+        public int FindLast(char c)
+        {
+            int index = -1;
+            for (int i = 0; i < _length; i++)
+                if (_string[i] == c)
+                    index = i;
+            return index;
+        }
+
         /*
          * Сравнение строк. Возвращает:
          *  0, если строки равны (посимвольно)
@@ -201,6 +223,66 @@ namespace Eric.String
             if (flag)
                 return 0;
             return 1;
+        }
+
+        /*
+         * Аналог Replace у string, но т.к. у нас строка не константная - мы можем
+         * заменять символы в самой строке, а не возвращать новую.
+         * Возвращает количество замен
+         */
+
+        public int Replace(char _old, char _new)
+        {
+            int changes = 0;
+            for (int i = 0; i < _length; i++)
+            {
+                if (_string[i] == _old)
+                {
+                    _string[i] = _new;
+                    ++changes;
+                }
+            }
+            return changes;
+        }
+
+        // Стирает указаное количество символов с указанной позиции
+        public void Erase(int index, int length)
+        {
+            for (int i = index; i < index + length; i++)
+            {
+                _string[i] = (char)0;
+            }
+        }
+
+        /*
+         * Т.к. наша строка представляет из себя динамический массив,
+         * и её длина может сокращаться, то неплохо бы было иметь возможность
+         * уменьшать массив, если полезная длина существенно меньше capacity.
+         * Fit обрезает массив, оставляя с первого ненулевого символа по последний
+         */
+        public void Fit()
+        {
+            int firstIndex = 0;
+            int lastIndex = _string.Length - 1;
+
+            for (int i = 0; i < _string.Length && _string[i] == 0; i++)
+            {
+                    firstIndex = i;
+            }
+
+            for (int i = _string.Length - 1; i > 0 && _string[i] == 0; i--)
+            {
+                    lastIndex = i;
+            }
+
+            char[] temp = new char[lastIndex - firstIndex];
+            for (int i = 0; i < temp.Length - 1; i++)
+            {
+                temp[i] = _string[firstIndex + i + 1];
+            }
+            _string = null;
+            _string = temp;
+            _length = lastIndex - firstIndex;
         }
 
         // Естественно оверрайдим ToString

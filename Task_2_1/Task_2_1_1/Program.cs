@@ -12,9 +12,17 @@ namespace Task_2_1_1
         static void Main(string[] args)
         {
             MyString str = "Hello World!!!";
-            MyString str2 = "Hello World!!!";
 
-            Console.WriteLine(str.Compare(str2));
+            Console.WriteLine($"{str} {str.Length} {str.Capacity}");
+
+            str.Erase(0, 3);
+            str.Fit();
+
+            Console.WriteLine($"{str} {str.Length} {str.Capacity}");
+
+            str[12] = 'f';
+
+            Console.WriteLine($"{str} {str.Length} {str.Capacity}");
         }
     }
 }
