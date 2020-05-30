@@ -11,8 +11,10 @@ namespace Task_2_1_1
     {
         static void Main(string[] args)
         {
-            MyString str = new MyString("Привет Мир!!!");
-            Console.WriteLine(str); ;
+            MyString str = "Hello World!!!";
+            MyString str2 = "Hello World!!!";
+
+            Console.WriteLine(str.Compare(str2));
         }
     }
 }
