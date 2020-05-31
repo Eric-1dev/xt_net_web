@@ -11,7 +11,7 @@ namespace Eric.String
 {
     public class MyString
     {
-        char[] _string;
+        private char[] _string;
         private int _length = 0; // Полезная длина массива. Т.е. длина пользовательских данных в массиве
         private float _multiplier = (float)1.5; // Множитель. Определяет коэффициент запаса пустых ячеек массива при расширении
 
