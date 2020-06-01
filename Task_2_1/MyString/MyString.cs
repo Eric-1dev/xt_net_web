@@ -22,16 +22,16 @@ namespace Eric.String
          * Конструктор, с указанием длины строки.
          * Создает массив чаров длиной num * multiplier
          */
+        
         public MyString(int num)
         {
-            _init(num);
+            _length = num;
+            _string = new char[(int)(num * _multiplier)];
         }
 
         // Конструктор, формирующий нашу строку из массива символов
-        public MyString(char[] arr)
+        public MyString(char[] arr) : this(arr.Length)
         {
-             // MyString(arr.Length); // Так почему-то нельзя, поэтому придется сделать вспомогательный метод _init
-            _init(arr.Length);
             for (int i = 0; i < arr.Length; i++)
             {
                 _string[i] = arr[i];
@@ -39,9 +39,8 @@ namespace Eric.String
         }
 
         // Конструируем нашу строку из штатного string
-        public MyString(string str)
+        public MyString(string str) : this(str.Length)
         {
-            _init(str.Length);
             for (int i = 0; i < str.Length; i++)
             {
                 _string[i] = str[(int)i];
@@ -49,9 +48,8 @@ namespace Eric.String
         }
 
         // Конструируем нашу строку из MyString
-        public MyString(MyString str)
+        public MyString(MyString str) : this(str.Length)
         {
-            _init(str.Length);
             for (int i = 0; i < str.Length; i++)
             {
                 _string[i] = str[i];
@@ -63,7 +61,8 @@ namespace Eric.String
         {
             if (length > str.Length)
                 length = str.Length;
-            _init(length);
+            _length = length;
+            _string = new char[(int)(length * _multiplier)];
             for (int i = index; i < i + length; i++)
             {
                 _string[i] = str[i];
@@ -77,19 +76,10 @@ namespace Eric.String
         }
 
         /*
-         * Вспомогательный метод, используемый в конструкторах
-         */
-        private void _init(int num)
-        {
-            _length = num;
-            _string = new char[(int)(num * _multiplier)];
-        }
-
-        /*
          * Вспомогательный метод расширения массива.
          * Необязательный параметр указывает на необходимую длину массива
          */
-        private void _expand(int targetLength)
+        private void Expand(int targetLength)
         {
             char[] _temp = new char[(int)(targetLength * _multiplier)];
             for (int i = 0; i < _length; i++)
@@ -113,7 +103,7 @@ namespace Eric.String
             {
                 if (index >= _string.Length) // Если индекс выходит за размеры массива, то расширяем массив
                 {
-                    _expand(index);
+                    Expand(index);
                     _length = index + 1;
                 }
                 if (index >= _length) // Если индекс больше полезной длины, то задаем новую полезную длину
@@ -153,7 +143,12 @@ namespace Eric.String
         // Оператор приведения MyString к string
         public static implicit operator string(MyString str) => str.ToString();
 
-        // Пперезгрузка оператора +, как оператора конкатенации строк
+        // Перегрузка операторов сравнения == и !=
+        public static bool operator ==(MyString str1, MyString str2) => Compare(str1, str2) == 0;
+        public static bool operator !=(MyString str1, MyString str2) => Compare(str1, str2) != 0;
+        //public override bool Equals(object obj) => Compare(base as MyString, obj as MyString) == 0;
+
+        // Перезгрузка оператора +, как оператора конкатенации строк
         public static MyString operator +(MyString str1, MyString str2) => str1.Concat(str2);
 
         // Конкатенация строк
@@ -206,31 +201,29 @@ namespace Eric.String
          *  2, если исходная строка длинее str
          *  3, если исходная строка короче str
          */
-        public int Compare(MyString str)
+
+        static public int Compare(MyString a, MyString b)
         {
             // Нет смысла сравнивать посимвольно, если разная длина
-            if (this.Length > str.Length)
+            if (a?.Length > b?.Length)
                 return 2;
-            if (this.Length < str.Length)
+            if (a?.Length < b?.Length)
                 return 3;
 
-            bool flag = true;
-            for (int i = 0; i < _length; i++)
+            for (int i = 0; i < a?.Length; i++)
             {
-                if (this[i] != str[i])
-                    flag = false; // если нашли отличия - сбрасываем флаг
+                if (a?[i] != b?[i])
+                    return 1;
             }
-            if (flag)
-                return 0;
-            return 1;
+            return 0;
         }
+        public int Compare(MyString str) => Compare(this, (MyString)str);
 
         /*
          * Аналог Replace у string, но т.к. у нас строка не константная - мы можем
          * заменять символы в самой строке, а не возвращать новую.
          * Возвращает количество замен
          */
-
         public int Replace(char _old, char _new)
         {
             int changes = 0;
