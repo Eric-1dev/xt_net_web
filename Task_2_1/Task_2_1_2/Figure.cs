@@ -27,7 +27,7 @@ namespace Task_2_1_2
         public int Y { get => y; }
         public MyString Name { get => name; }
 
-        protected int NotPositiveExeption(ref int x)
+        protected int NotPositiveExeption(ref int x) // Проверяем в backend'е, если проггер накосячит в UI. Наказане - эксепшн
         {
             if (x <= 0)
                 throw new ArgumentOutOfRangeException("Value", "Value must be positive");
@@ -73,8 +73,8 @@ namespace Task_2_1_2
         public Ring(int x, int y, int radius, int thickness) : base(x, y)
         {
             this.name = "Кольцо";
-            if (radius - thickness < 0)
-                throw new ArgumentOutOfRangeException("thickness", "Thickness cannot be more than Radius");
+            if (radius - thickness <= 0)
+                throw new ArgumentOutOfRangeException("thickness", "Thickness must be less than Radius");
             innerRound = new Round(x, y, radius - thickness);
             outerRound = new Round(x, y, radius);
         }

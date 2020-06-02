@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,11 +35,8 @@ namespace Task_2_1_2
                     case (byte)Actions.ADD:
                         byte figCode;
                         int x, y;
-                        int radius;
-                        int thickness;
-                        int width;
-                        int length;
-                        int a, b, c;
+                        int[] vals;
+                        MyString str;
 
                         Console.WriteLine("Выберите тип фигуры:" +
                                             $"\n\t\t{(byte)Figures.LINE}. Линия" +
@@ -53,71 +51,84 @@ namespace Task_2_1_2
                         switch (figCode)
                         {
                             case (byte)Figures.LINE:
-                                int x2, y2;
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Веведите координаты конца отрезка через пробел";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите координаты конца отрезка через пробел");
-                                    if (EnterTwoValues(out x2, out y2))
-                                        figures.Add(new Line(x, y, x2, y2));
+                                    vals = EnterValues();
+                                    if (vals[0] == 2)
+                                        figures.Add(new Line(x, y, vals[1], vals[2]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             case (byte)Figures.CIRCLE:
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Веведите радиус окружности";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите радиус окружности");
-                                    if (EnterOneValuePos(out radius))
-                                        figures.Add(new Circle(x, y, radius));
+                                    vals = EnterValues();
+                                    if (vals[0] == 1 && IsAllPositive(vals))
+                                        figures.Add(new Circle(x, y, vals[1]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             case (byte)Figures.ROUND:
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Веведите радиус круга";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите радиус круга");
-                                    if (EnterOneValuePos(out radius))
-                                        figures.Add(new Round(x, y, radius));
+                                    vals = EnterValues();
+                                    if (vals[0] == 1 && IsAllPositive(vals))
+                                        figures.Add(new Round(x, y, vals[1]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             case (byte)Figures.RING:
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Веведите радиус кольца и его толщину через пробел";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите радиус кольца и его толщину через пробел");
-                                    if (EnterTwoValuesPos(out radius, out thickness))
-                                        figures.Add(new Ring(x, y, radius, thickness));
+                                    vals = EnterValues();
+                                    if (vals[0] == 2 && IsAllPositive(vals) && vals[1] > vals[2])
+                                        figures.Add(new Ring(x, y, vals[1], vals[2]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             case (byte)Figures.RECTANGLE:
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Веведите длину и ширину прямоугольника через пробел";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите длину и ширину прямоугольника через пробел");
-                                    if (EnterTwoValuesPos(out length, out width))
-                                        figures.Add(new Rectangle(x, y, width, length));
+                                    vals = EnterValues();
+                                    if (vals[0] == 2 && IsAllPositive(vals))
+                                        figures.Add(new Rectangle(x, y, vals[1], vals[2]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             case (byte)Figures.SQUARE:
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Веведите длину стороны квадрата";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите длину стороны квадрата");
-                                    if (EnterOneValuePos(out width))
-                                        figures.Add(new Square(x, y, width));
+                                    vals = EnterValues();
+                                    if (vals[0] == 1 && IsAllPositive(vals))
+                                        figures.Add(new Square(x, y, vals[1]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             case (byte)Figures.TRIANGLE:
-                                BaseCoordsTpl();
-                                if (EnterTwoValues(out x, out y))
+                                str = "Введите размеры сторон треугольника через пробел";
+                                if (BaseCoordsTpl(out x, out y, str))
                                 {
-                                    Console.WriteLine("Веведите длину стороны квадрата");
-                                    if (EnterOneValuePos(out width))
-                                        figures.Add(new Triangle(x, y, a, b, c));
+                                    vals = EnterValues();
+                                    if (vals[0] == 3 && IsAllPositive(vals))
+                                        figures.Add(new Triangle(x, y, vals[1], vals[2], vals[3]));
+                                    else
+                                        IncorrectDataAlert();
                                 }
                                 break;
                             default:
-                                IncorrectAlert();
+                                IncorrectDataAlert();
                                 break;
                         }
 
@@ -137,7 +148,7 @@ namespace Task_2_1_2
                     case (byte)Actions.EXIT:
                         break;
                     default:
-                        IncorrectAlert();
+                        IncorrectDataAlert();
                         break;
                 }
             }
@@ -151,52 +162,45 @@ namespace Task_2_1_2
 
         static MyString user;
 
-        public static bool EnterValues(ref int val1, ref int val2)
+        public static int[] EnterValues()
         {
             string[] str = Console.ReadLine().Trim().Split(' ');
-            if ( str.Length == values.Length )
+            int[] vals = new int[str.Length + 1]; // Создаем массив полученных из консоли данных. Первый элемент хранить количество успешно введенных значений
+            vals[0] = 0;
+            for (int i = 0; i < str.Length; i++)
+                if (int.TryParse(str[i], out vals[i + 1])) 
+                    vals[0]++;
+            return vals;
         }
-        public static bool EnterTwoValues(out int val1, out int val2)
+        public static bool IsAllPositive(int[] vals)
         {
-            val1 = val2 = 0;
-            string[] str = Console.ReadLine().Trim().Split(' ');
-            if (str.Length == 2)
+            for (int i = 0; i < vals.Length; i++)
+                if (vals[i] <= 0)
+                {
+                    Console.WriteLine("Данные параметры не могут быть отрицательными");
+                    return false;
+                }
+            return true;
+        }
+
+        // Ввод начальных координат и вывод сообщения о следующих необходимых данных
+        public static bool BaseCoordsTpl(out int x, out int y, MyString str)
+        {
+            x = y = 0;
+            int[] vals;
+            Console.WriteLine("Введите координаты начала отсчета через пробел:");
+            vals = EnterValues();
+            if ( vals[0] == 2 )
             {
-                int.TryParse(str[0], out val1);
-                int.TryParse(str[1], out val2);
+                x = vals[1];
+                y = vals[2];
+                Console.WriteLine(str);
                 return true;
             }
-            IncorrectAlert();
+            IncorrectDataAlert();
             return false;
         }
-        public static bool EnterThreeValuesPos(out int val1, out int val2, out int val3)
-        {
-            if (EnterTwoValues(out val1, out val2))
-                if (val1 > 0 && val2 > 0)
-                    return true;
-            IncorrectAlert();
-            return false;
-        }
-        public static bool EnterTwoValuesPos(out int val1, out int val2)
-        {
-            if (EnterTwoValues(out val1, out val2))
-                if (val1 > 0 && val2 > 0)
-                    return true;
-            IncorrectAlert();
-            return false;
-        }
-        public static bool EnterOneValuePos(out int val)
-        {
-            int unused = 1; // Неиспользуемая переменная, позволяющаяя получить true, при правильном вводе val
-            if (EnterTwoValuesPos(out val, out unused))
-                return true;
-            return false;
-        }
-        public static void BaseCoordsTpl()
-        {
-            Console.WriteLine("Введите координаты начала отсчета через пробел:");
-        }
-        public static void IncorrectAlert()
+        public static void IncorrectDataAlert()
         {
             Console.WriteLine("Некорректный ввод");
         }

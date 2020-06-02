@@ -39,30 +39,14 @@ namespace Eric.String
         }
 
         // Конструируем нашу строку из штатного string
-        public MyString(string str) : this(str.Length)
-        {
-            for (int i = 0; i < str.Length; i++)
-            {
-                _string[i] = str[(int)i];
-            }
-        }
+        public MyString(string str) : this(str.ToCharArray()) { }
 
         // Конструируем нашу строку из MyString
-        public MyString(MyString str) : this(str.Length)
-        {
-            for (int i = 0; i < str.Length; i++)
-            {
-                _string[i] = str[i];
-            }
-        }
+        public MyString(MyString str) : this(str.ToCharArray()) { }
 
-        // Конструируем нашу строку из MyString с указанной позиции, указанной длины
-        public MyString(MyString str, int index, int length)
+        // Конструируем нашу строку из MyString указанной длины, с указанной позиции
+        public MyString(MyString str, int index, int length) : this(length > str.Length?str.Length:length)
         {
-            if (length > str.Length)
-                length = str.Length;
-            _length = length;
-            _string = new char[(int)(length * _multiplier)];
             for (int i = index; i < i + length; i++)
             {
                 _string[i] = str[i];
@@ -146,7 +130,6 @@ namespace Eric.String
         // Перегрузка операторов сравнения == и !=
         public static bool operator ==(MyString str1, MyString str2) => Compare(str1, str2) == 0;
         public static bool operator !=(MyString str1, MyString str2) => Compare(str1, str2) != 0;
-        //public override bool Equals(object obj) => Compare(base as MyString, obj as MyString) == 0;
 
         // Перезгрузка оператора +, как оператора конкатенации строк
         public static MyString operator +(MyString str1, MyString str2) => str1.Concat(str2);
