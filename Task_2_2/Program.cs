@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,6 @@ namespace Task_2_2
         {
             ConsoleKeyInfo key;
             bool exit = false;
-
             Game game = new Game(120, 40);
 
             while (!exit)
@@ -49,7 +49,7 @@ namespace Task_2_2
     class GameObject
     {
         private char[] _view;
-        static private Random _rnd = new Random();
+        static public Random _rnd = new Random();
         public int X { get; set; }
         public int Y { get; set; }
         public char[] View 
@@ -72,7 +72,7 @@ namespace Task_2_2
             for (int i = 0; i < allGameObjects.Count; i++)
             {
                 if (this is Character)
-                    if ((this as Character).Cross(allGameObjects[i]))
+                    while ((this as Character).Cross(allGameObjects[i]))
                         SetRndCoords();
             }
             allGameObjects.Add(this);
@@ -111,12 +111,13 @@ namespace Task_2_2
             Clear();
             allGameObjects.Remove(this);
         }
-        
-        static public List<GameObject> allGameObjects = new List<GameObject>();
+
+        static internal List<GameObject> allGameObjects = new List<GameObject>();
     }
 
     class Character : GameObject
     {
+        protected char[] _view1, _view2;
         public Character(int width, int height) : base(width, height) { }
         public void Move(MOVE direction)
         {
@@ -153,6 +154,11 @@ namespace Task_2_2
                         X = old_x; Y = old_y;
                         (this as Player).Damage();
                     }
+                    if (this is Enemy && allGameObjects[i] is Player) // Пересечение врага с игроком
+                    {
+                        X = old_x; Y = old_y;
+                        (allGameObjects[i] as Player).Damage();
+                    }
                     else if (this is Player && allGameObjects[i] is Medkit) // Пересечение игрока с аптечкой
                     {
                         (this as Player).Heal((allGameObjects[i] as Medkit).HEALCOUNT);
@@ -176,6 +182,13 @@ namespace Task_2_2
                 return true;
             return false;
         }
+        public void Step()
+        {
+            if (View == _view1)
+                View = _view2;
+            else
+                View = _view1;
+        }
     }
 
     class Player : Character
@@ -195,10 +208,13 @@ namespace Task_2_2
         }
         public Player(int max_hp) : base(3, 3)
         {
-            //string str = "bod" + ")╨(" + "\u250C-\u2510";
-            HP = _max_hp = max_hp;
             string str = "b_d" + ")╨(" + "\u2510-\u2510";
-            View = str.ToCharArray();
+            _view1 = str.ToCharArray();
+            str = "b_d" + ")╨(" + "\u250C-\u250C";
+            _view2 = str.ToCharArray();
+            HP = _max_hp = max_hp;
+
+            View = _view1;
         }
         private void UpdateHPBar()
         {
@@ -225,7 +241,10 @@ namespace Task_2_2
         public Enemy() : base(3, 3)
         {
             string str = "/-\\" + "|||" + "\\_/";
-            View = str.ToCharArray();
+            _view1 = str.ToCharArray();
+            str = "/-\\" + "|-|" + "\\_/";
+            _view2 = str.ToCharArray();
+            View = _view1;
         }
     }
     class Forest : GameObject
@@ -267,11 +286,11 @@ namespace Task_2_2
     }
     class Game
     {
-        private bool _run { get; set; }
-        static public int X { get; private set; }
-        static public int Y { get; private set; }
+        static private bool _run { get; set; }
+        static internal int X { get; private set; }
+        static internal int Y { get; private set; }
         public char Edge { get; set; } = '+';
-        static public Timer timer;
+        static internal Timer timer;
 
         private Player player;
         private Key key;
@@ -280,7 +299,6 @@ namespace Task_2_2
         private Medkit[] food_small = new Medkit[3];
         private Forest[] forest = new Forest[4];
 
-        private Random rnd = new Random();
         public Game(int x, int y)
         {
             X = x;
@@ -291,28 +309,20 @@ namespace Task_2_2
 
             DrawEdge();
 
-            player = new Player(10);
+            player = new Player(5);
             key = new Key();
 
             for (int i = 0; i < enemy.Length; i++)
-            {
                 enemy[i] = new Enemy();
-            }
 
             for (int i = 0; i < food_big.Length; i++)
-            {
                 food_big[i] = new Medkit(MED_TYPE.BIG);
-            }
 
             for (int i = 0; i < food_small.Length; i++)
-            {
                 food_small[i] = new Medkit(MED_TYPE.SMALL);
-            }
 
             for (int i = 0; i < forest.Length; i++)
-            {
-                forest[i] = new Forest(rnd.Next(2, 10), rnd.Next(2, 10));
-            }
+                forest[i] = new Forest(GameObject._rnd.Next(2, 10), GameObject._rnd.Next(2, 10));
             Start();            
         }
         private void DrawEdge()
@@ -330,13 +340,14 @@ namespace Task_2_2
                 Console.Write(Edge);
             }
         }
-        public bool isRun() => _run;
+        static public bool isRun() => _run;
         private void Start() { 
             _run = true;
-            timer = new Timer(TickTak, null, 0, 200);
+            timer = new Timer(TickTak, null, 0, 150);
         }
-        static public void Stop(bool win)
+        static internal void Stop(bool win)
         {
+            _run = false;
             Console.SetCursorPosition(Game.X / 2 - 6, Game.Y / 2);
             if (win)
                 Console.WriteLine("You WIN!!!");
@@ -352,11 +363,12 @@ namespace Task_2_2
         }
         static void TickTak(object obj)
         {
-            Random rnd = new Random();
             foreach (var gameObj in GameObject.allGameObjects)
             {
+                if (gameObj is Character)
+                    (gameObj as Character).Step();
                 if (gameObj is Enemy)
-                    (gameObj as Enemy).Move((MOVE)rnd.Next((int)MOVE.LEFT - 1, (int)MOVE.DOWN) + 1);
+                    (gameObj as Enemy).Move((MOVE)GameObject._rnd.Next((int)MOVE.LEFT - 1, (int)MOVE.DOWN) + 1);
             }
         }
     }
