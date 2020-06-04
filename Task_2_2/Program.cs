@@ -15,10 +15,10 @@ namespace Task_2_2
         static void Main(string[] args)
         {
             ConsoleKeyInfo key;
-            bool exit = false;
+            bool exitGame = false;
             Game game = new Game(120, 40);
 
-            while (!exit)
+            while (!exitGame)
             {
                 if (Console.KeyAvailable)
                 {
@@ -38,7 +38,7 @@ namespace Task_2_2
                             game.MovePlayer(MOVE.RIGHT);
                             break;
                         case ConsoleKey.Escape:
-                            exit = true;
+                            exitGame = true;
                             break;
                     }
                 }
@@ -48,11 +48,9 @@ namespace Task_2_2
 
     class GameObject
     {
-        private char[] _view;
-        static public Random _rnd = new Random();
-        public int X { get; set; }
-        public int Y { get; set; }
-        public char[] View 
+        // Здесь храним внешний вид объекта
+        private char[] _view;        
+        public char[] View
         {
             get => _view;
             set
@@ -61,6 +59,10 @@ namespace Task_2_2
                 Draw();
             }
         }
+        // Random _rnd - статическая, т.к. используется в разных классах. Незачем плодить сущности
+        static public Random _rnd = new Random();
+        public int X { get; set; }
+        public int Y { get; set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
         public GameObject(int width, int height)
@@ -71,16 +73,16 @@ namespace Task_2_2
             FitToEdge();
             for (int i = 0; i < allGameObjects.Count; i++)
             {
-                if (this is Character)
-                    while ((this as Character).Cross(allGameObjects[i]))
+                if (!(this is Forest))
+                    while (this.Cross(allGameObjects[i]))
                         SetRndCoords();
             }
             allGameObjects.Add(this);
         }
         private void SetRndCoords()
         {
-            X = _rnd.Next(0, Game.X - Width);
-            Y = _rnd.Next(0, Game.Y - Height);
+            X = _rnd.Next(1, Game.FieldX - Width);
+            Y = _rnd.Next(1, Game.FieldY - Height);
         }
         private void Draw_Clear(DRAW_CLEAR flag)
         {
@@ -97,13 +99,6 @@ namespace Task_2_2
                 Console.SetCursorPosition(X, Y + i + 1);
             }
         }
-        protected void FitToEdge()
-        {
-            if (X < 1) X = 1;
-            if (X > Game.X - Width) X = Game.X - Width;
-            if (Y < 1) Y = 1;
-            if (Y > Game.Y - Height) Y = Game.Y - Height;
-        }
         public void Draw() { Draw_Clear(DRAW_CLEAR.DRAW); }
         public void Clear() { Draw_Clear(DRAW_CLEAR.CLEAR); }
         public void Remove()
@@ -112,11 +107,34 @@ namespace Task_2_2
             allGameObjects.Remove(this);
         }
 
+        // Не даёт пересеч границу поля
+        protected void FitToEdge()
+        {
+            if (X < 1) X = 1;
+            if (X > Game.FieldX - Width) X = Game.FieldX - Width;
+            if (Y < 1) Y = 1;
+            if (Y > Game.FieldY - Height) Y = Game.FieldY - Height;
+        }
+
+        // Все игровые объекты храним в статической коллекции
         static internal List<GameObject> allGameObjects = new List<GameObject>();
+        
+        /*
+         *Определяет пересечение объекта с другими.
+         * Ранее принадлежал классу Character, но
+         * пригодился в конструкторе GameObject'а.
+         */
+        public bool Cross(GameObject gObj)
+        {
+            if (X + Width > gObj.X && X < gObj.X + gObj.Width && Y + Height > gObj.Y && Y < gObj.Y + gObj.Height)
+                return true;
+            return false;
+        }
     }
 
     class Character : GameObject
     {
+        // Добавляем 2 массива для хранения основного вида и альтернативного
         protected char[] _view1, _view2;
         public Character(int width, int height) : base(width, height) { }
         public void Move(MOVE direction)
@@ -161,11 +179,11 @@ namespace Task_2_2
                     }
                     else if (this is Player && allGameObjects[i] is Medkit) // Пересечение игрока с аптечкой
                     {
-                        (this as Player).Heal((allGameObjects[i] as Medkit).HEALCOUNT);
+                        (this as Player).Heal((allGameObjects[i] as Medkit).HealCount);
                         allGameObjects[i].Remove();
-                        i++;
+                        //i++;
                     }
-                    else if (this is Player && allGameObjects[i] is Key)
+                    else if (this is Player && allGameObjects[i] is Money)
                     {
                         Game.Stop(true);
                     }
@@ -176,12 +194,8 @@ namespace Task_2_2
             // --------------------------------------------
             Draw();
         }
-        public bool Cross(GameObject gObj)
-        {
-            if (X + Width > gObj.X && X < gObj.X + gObj.Width && Y + Height > gObj.Y && Y < gObj.Y + gObj.Height)
-                return true;
-            return false;
-        }
+        
+        // Меняем модель на альтернаивную и обратно, имитируя шаги
         public void Step()
         {
             if (View == _view1)
@@ -193,17 +207,20 @@ namespace Task_2_2
 
     class Player : Character
     {
-        private int _max_hp;
+        private readonly int _max_hp;
         private int _hp;
         public int HP
         {
             get => _hp;
             internal set
             {
-                _hp = value;
-                if (_hp > _max_hp)
-                    _hp = _max_hp;
-                UpdateHPBar();
+                if (_hp != value) // Отрисовываем полоску HP только при изменении
+                {
+                    _hp = value;
+                    if (_hp > _max_hp)
+                        _hp = _max_hp;
+                    UpdateHPBar();
+                }
             }
         }
         public Player(int max_hp) : base(3, 3)
@@ -222,10 +239,14 @@ namespace Task_2_2
             Console.SetCursorPosition(2, 0);
             Console.Write(hpBar);
         }
+
+        // Лечим
         public void Heal(int count)
         {
             HP += count;
         }
+
+        // Дамажим
         public void Damage()
         {
             HP--;
@@ -247,6 +268,8 @@ namespace Task_2_2
             View = _view1;
         }
     }
+
+    // Класс леса
     class Forest : GameObject
     {
         public Forest(int width, int height) : base(width, height)
@@ -255,9 +278,11 @@ namespace Task_2_2
             View = str.ToCharArray();
         }
     }
+
+    // Класс аптечки
     class Medkit : GameObject
     {
-        public int HEALCOUNT { get; private set; }
+        public int HealCount { get; private set; }
         public MED_TYPE MEDTYPE { get; private set; }
         public Medkit(MED_TYPE medType) : base(medType == MED_TYPE.BIG ? 5 : 3, 3)
         {
@@ -265,90 +290,96 @@ namespace Task_2_2
             this.MEDTYPE = medType;
             if (this.MEDTYPE == MED_TYPE.SMALL)
             {
-                HEALCOUNT = 1;
+                HealCount = 1;
                 str = "┌─┐" + "│+│" + "└─┘";
             }
             else
             {
-                HEALCOUNT = 3;
+                HealCount = 3;
                 str = "┌───┐" + "│+++│" + "└───┘";
             }
             View = str.ToCharArray();
         }
     }
-    class Key : GameObject
+
+    // Деньги - цель игры
+    class Money : GameObject
     {
-        public Key() : base(3, 3)
+        public Money() : base(3, 3)
         {
             string str = "┌─┐" + "│$│" + "└─┘";
             View = str.ToCharArray();
         }
     }
+
+    // Класс игры. Задает основные параметры, добавляет персонажей
     class Game
     {
-        static private bool _run { get; set; }
-        static internal int X { get; private set; }
-        static internal int Y { get; private set; }
+        static private bool run { get; set; }
+        static internal int FieldX { get; private set; }
+        static internal int FieldY { get; private set; }
         public char Edge { get; set; } = '+';
         static internal Timer timer;
 
         private Player player;
-        private Key key;
-        private Enemy[] enemy = new Enemy[4];
-        private Medkit[] food_big = new Medkit[1];
-        private Medkit[] food_small = new Medkit[3];
-        private Forest[] forest = new Forest[4];
+        private readonly Money money;
+        private readonly Enemy[] enemy = new Enemy[4];
+        private readonly Medkit[] food_big = new Medkit[1];
+        private readonly Medkit[] food_small = new Medkit[3];
+        private readonly Forest[] forest = new Forest[4];
 
         public Game(int x, int y)
         {
-            X = x;
-            Y = y;
-            Console.SetWindowSize(X + 1, Y + 1);
-            Console.SetBufferSize(X + 1, Y + 1);
+            FieldX = x;
+            FieldY = y;
+            Console.SetWindowSize(FieldX + 1, FieldY + 1);
+            Console.SetBufferSize(FieldX + 1, FieldY + 1);
             Console.CursorVisible = false;
 
             DrawEdge();
 
             player = new Player(5);
-            key = new Key();
+            money = new Money();
 
             for (int i = 0; i < enemy.Length; i++)
                 enemy[i] = new Enemy();
 
-            for (int i = 0; i < food_big.Length; i++)
-                food_big[i] = new Medkit(MED_TYPE.BIG);
-
             for (int i = 0; i < food_small.Length; i++)
                 food_small[i] = new Medkit(MED_TYPE.SMALL);
+
+            for (int i = 0; i < food_big.Length; i++)
+                food_big[i] = new Medkit(MED_TYPE.BIG);
 
             for (int i = 0; i < forest.Length; i++)
                 forest[i] = new Forest(GameObject._rnd.Next(2, 10), GameObject._rnd.Next(2, 10));
             Start();            
         }
+
+        // Рисуем границы карты
         private void DrawEdge()
         {
-            string str = new string(Edge, X - 1);
+            string str = new string(Edge, FieldX - 1);
             Console.SetCursorPosition(1, 0);
             Console.Write(str);
-            Console.SetCursorPosition(1, Y);
+            Console.SetCursorPosition(1, FieldY);
             Console.Write(str);
-            for (int i = 0; i < Y; i++)
+            for (int i = 0; i < FieldY; i++)
             {
                 Console.SetCursorPosition(0, i);
                 Console.Write(Edge);
-                Console.SetCursorPosition(X, i);
+                Console.SetCursorPosition(FieldX, i);
                 Console.Write(Edge);
             }
         }
-        static public bool isRun() => _run;
+        static public bool IsRun() => run;
         private void Start() { 
-            _run = true;
+            run = true;
             timer = new Timer(TickTak, null, 0, 150);
         }
         static internal void Stop(bool win)
         {
-            _run = false;
-            Console.SetCursorPosition(Game.X / 2 - 6, Game.Y / 2);
+            run = false;
+            Console.SetCursorPosition(Game.FieldX / 2 - 6, Game.FieldY / 2);
             if (win)
                 Console.WriteLine("You WIN!!!");
             else
@@ -356,11 +387,14 @@ namespace Task_2_2
             timer.Dispose();
         }
 
+        // Если игра запущена - игрок может ходить
         public void MovePlayer(MOVE direction)
         {
-            if (isRun())
+            if (IsRun())
                 player.Move(direction);
         }
+
+        // Функция таймера. Тут имитируем шаги и заставляем врагов ходить
         static void TickTak(object obj)
         {
             foreach (var gameObj in GameObject.allGameObjects)
