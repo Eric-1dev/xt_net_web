@@ -48,27 +48,39 @@ namespace Task_2_2
 
     class GameObject
     {
+        // Random _rnd - статическая, т.к. используется в разных классах. Незачем плодить сущности
+        static public Random _rnd = new Random();
+        // Координаты объекта
+        public int X { get; set; }
+        public int Y { get; set; }
+        
         // Здесь храним текущий внешний вид объекта
-        private char[,] _curView;        
-        protected char[,] CurView
+        private char[,] _curView;
+        public char[,] CurView
         {
             get => _curView;
-            set
+            protected set
             {
                 _curView = value;
-                Create();
+                FitToEdge();
                 Draw();
             }
         }
-        // Random _rnd - статическая, т.к. используется в разных классах. Незачем плодить сущности
-        static public Random _rnd = new Random();
-        public int X { get; set; }
-        public int Y { get; set; }
-        public ConsoleColor Color { get; set; }
-        private bool IsCreated { get; set; }
+        private ConsoleColor _color;
+        public ConsoleColor Color {
+            get => _color;
+            set
+            {
+                _color = value;
+                Draw();
+            }
+        }
         public GameObject()
         {
+            CurView = new char[1, 1];
             Color = ConsoleColor.White;
+            SetRndCoords();
+            allGameObjects.Add(this);
         }
         private void SetRndCoords()
         {
@@ -98,28 +110,12 @@ namespace Task_2_2
         }
         protected void Draw() { Draw_Clear(DRAW_CLEAR.DRAW); }
         protected void Clear() { Draw_Clear(DRAW_CLEAR.CLEAR); }
-        
-        // Добавляет объект в коллекцию. Вывывается автоматически, при назначении внешнего вида объекта
-        private void Create()
-        {
-            if (IsCreated == false)
-            {
-                SetRndCoords();
-                FitToEdge();
-                for (int i = 0; i < allGameObjects.Count; i++)
-                {
-                    if (!(this is Forest) || !(allGameObjects[i] is Forest))
-                        while (this.Cross(allGameObjects[i]))
-                            SetRndCoords();
-                }
-                allGameObjects.Add(this);
-                IsCreated = true;
-            }
-        }
         internal void Remove()
         {
             Clear();
+            Game.mutexObj.WaitOne();
             allGameObjects.Remove(this);
+            Game.mutexObj.ReleaseMutex();
         }
 
         // Не даёт пересечь границу поля
@@ -133,18 +129,6 @@ namespace Task_2_2
 
         // Все игровые объекты храним в статической коллекции
         static internal List<GameObject> allGameObjects = new List<GameObject>();
-        
-        /*
-         *Определяет пересечение объекта с другими.
-         * Ранее принадлежал классу Character, но
-         * пригодился в конструкторе GameObject'а.
-         */
-        protected bool Cross(GameObject gObj)
-        {
-            if (X + CurView.GetLength(1) > gObj.X && X < gObj.X + gObj.CurView.GetLength(1) && Y + CurView.GetLength(0) > gObj.Y && Y < gObj.Y + gObj.CurView.GetLength(0))
-                return true;
-            return false;
-        }
     }
 
     class Character : GameObject
@@ -210,7 +194,15 @@ namespace Task_2_2
             // --------------------------------------------
             Draw();
         }
-        
+
+        // Определяет пересечение объекта с другими.
+        private bool Cross(GameObject gObj)
+        {
+            if (X + CurView.GetLength(1) > gObj.X && X < gObj.X + gObj.CurView.GetLength(1) && Y + CurView.GetLength(0) > gObj.Y && Y < gObj.Y + gObj.CurView.GetLength(0))
+                return true;
+            return false;
+        }
+
         // Меняем модель на альтернаивную и обратно, имитируя шаги
         public void Step()
         {
@@ -257,6 +249,12 @@ namespace Task_2_2
             Game.mutexObj.WaitOne();
             string hpBar = " HP: " + new string('|', HP) + " ";
             Console.SetCursorPosition(2, 0);
+            if (HP > (2 * _max_hp) / 3)
+                Console.ForegroundColor = ConsoleColor.Green;
+            else if (HP > _max_hp / 3 && HP <= (2 * _max_hp) / 3)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            else
+                Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(hpBar);
             Game.mutexObj.ReleaseMutex();
         }
@@ -297,7 +295,6 @@ namespace Task_2_2
     {
         public Forest(char c)
         {
-            Color = ConsoleColor.Green;
             char[,] view = new char[_rnd.Next(2, 10), _rnd.Next(2, 10)];
             for (int i = 0; i < view.GetLength(1); i++)
                 for (int j = 0; j < view.GetLength(0); j++)
@@ -355,10 +352,10 @@ namespace Task_2_2
 
         private Player player;
         private readonly Money money;
-        private readonly Enemy[] enemy = new Enemy[4];
+        private readonly Enemy[] enemy = new Enemy[6];
         private readonly Medkit[] food_big = new Medkit[1];
         private readonly Medkit[] food_small = new Medkit[3];
-        private readonly Forest[] forest = new Forest[4];
+        private readonly Forest[] forest = new Forest[8];
 
         public Game(int x, int y)
         {
@@ -370,7 +367,7 @@ namespace Task_2_2
 
             DrawEdge();
 
-            player = new Player(5);
+            player = new Player(9);
             player.Color = ConsoleColor.Cyan;
             money = new Money();
             money.Color = ConsoleColor.Yellow;
@@ -388,7 +385,10 @@ namespace Task_2_2
                 food_big[i] = new Medkit(MED_TYPE.BIG);
 
             for (int i = 0; i < forest.Length; i++)
+            {
                 forest[i] = new Forest();
+                forest[i].Color = ConsoleColor.Green;
+            }
             Start();            
         }
 
@@ -409,7 +409,8 @@ namespace Task_2_2
             }
         }
         static public bool IsRun() => run;
-        private void Start() { 
+        private void Start()
+        { 
             run = true;
             timer = new Timer(TickTak, null, 0, 150);
         }
@@ -419,9 +420,15 @@ namespace Task_2_2
             timer.Dispose();
             Console.SetCursorPosition(Game.FieldX / 2 - 6, Game.FieldY / 2);
             if (win)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("You WIN!!!");
+            }
             else
-                Console.WriteLine("Game over!!!");
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Потрачено!!!");
+            }
         }
 
         // Если игра запущена - игрок может ходить
