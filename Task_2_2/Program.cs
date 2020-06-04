@@ -169,12 +169,16 @@ namespace Task_2_2
                 {
                     if (this is Player && allGameObjects[i] is Enemy) // Пересечение игрока с врагом
                     {
-                        X = old_x; Y = old_y;
+                        (this as Player).StayBack(true, ref old_x, ref old_y);
+                        this.FitToEdge();
                         (this as Player).Damage();
                     }
-                    if (this is Enemy && allGameObjects[i] is Player) // Пересечение врага с игроком
+                    else if (this is Enemy && allGameObjects[i] is Player) // Пересечение врага с игроком
                     {
-                        X = old_x; Y = old_y;
+                        (allGameObjects[i] as Player).Clear();
+                        (allGameObjects[i] as Player).StayBack(false, ref old_x, ref old_y);
+                        (allGameObjects[i] as Player).FitToEdge();
+                        (allGameObjects[i] as Player).Draw();
                         (allGameObjects[i] as Player).Damage();
                     }
                     else if (this is Player && allGameObjects[i] is Medkit) // Пересечение игрока с аптечкой
@@ -188,7 +192,11 @@ namespace Task_2_2
                         Game.Stop(true);
                     }
                     else
-                        X = old_x; Y = old_y;
+                    {
+                        X = old_x;
+                        Y = old_y;
+                    }
+                        
                 }
             }
             // --------------------------------------------
@@ -201,6 +209,18 @@ namespace Task_2_2
             if (X + CurView.GetLength(1) > gObj.X && X < gObj.X + gObj.CurView.GetLength(1) && Y + CurView.GetLength(0) > gObj.Y && Y < gObj.Y + gObj.CurView.GetLength(0))
                 return true;
             return false;
+        }
+
+        // Отпрыгиваем
+        private void StayBack(bool iMove, ref int old_x, ref int old_y)
+        {
+            int mult = -1;
+            if (iMove)
+                mult = 1;
+            if (X > old_x) X -= 3 * mult;
+            else if (X < old_x) X += 3 * mult;
+            else if (Y > old_y) Y -= 3 * mult;
+            else if (Y < old_y) Y += 3 * mult;
         }
 
         // Меняем модель на альтернаивную и обратно, имитируя шаги
@@ -343,7 +363,7 @@ namespace Task_2_2
     // Класс игры. Задает основные параметры, добавляет персонажей
     class Game
     {
-        static private bool run { get; set; }
+        static private bool Run { get; set; }
         static internal int FieldX { get; private set; }
         static internal int FieldY { get; private set; }
         public char Edge { get; set; } = '+';
@@ -408,16 +428,17 @@ namespace Task_2_2
                 Console.Write(Edge);
             }
         }
-        static public bool IsRun() => run;
+        static public bool IsRun() => Run;
         private void Start()
         { 
-            run = true;
+            Run = true;
             timer = new Timer(TickTak, null, 0, 150);
         }
         static internal void Stop(bool win)
         {
-            run = false;
+            Run = false;
             timer.Dispose();
+            Game.mutexObj.WaitOne();
             Console.SetCursorPosition(Game.FieldX / 2 - 6, Game.FieldY / 2);
             if (win)
             {
@@ -429,6 +450,7 @@ namespace Task_2_2
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Потрачено!!!");
             }
+            Game.mutexObj.ReleaseMutex();
         }
 
         // Если игра запущена - игрок может ходить
