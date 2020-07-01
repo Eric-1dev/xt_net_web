@@ -59,10 +59,10 @@ namespace Task_3_1_2
             for (int i = 0; i < 5; i++)
             {
                 if (dict.ElementAt(i).Value > 1)
-                    Console.WriteLine(dict.ElementAt(i).Key + "\t" + dict.ElementAt(i).Value);
+                    Console.WriteLine("{0, -14}|{1, -14}", dict.ElementAt(i).Key, dict.ElementAt(i).Value);
             }
             float q = (float)dict.ElementAt(0).Value * 100 / totalCount;
-            Console.WriteLine($"Наиболее популярное слово в тексте: \"{dict.ElementAt(0).Key}\". Его процент от общего числа составляет ~ {q:0.0}%");
+            Console.WriteLine($"Наиболее популярное слово в тексте: \"{dict.ElementAt(0).Key}\".\nПроцент его вхождений от общего числа слов составляет ~ {q:0.0}%");
             if (q < 5)
                 Console.WriteLine("Что является приемлемым результатом. Текст в корректировке не нуждается.");
             else
