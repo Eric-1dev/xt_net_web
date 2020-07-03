@@ -156,14 +156,15 @@ namespace Eric.DynamicArray
         {
             int i = 0;
             var _temp = new DynamicArray<T>(Capacity);
-            foreach (var elem in this)
+            foreach (var elem in _arr)
             {
-                _temp[i++] = elem;
+                _temp._arr[i++] = elem;
             }
+            _temp.Length = Length;
             return _temp;
         }
 
-        public struct Enumerator<T> : IEnumerator<T>
+        public class Enumerator<U> : IEnumerator<T>
         {
             private DynamicArray<T> _collection;
             private int _curIndex;
@@ -183,11 +184,12 @@ namespace Eric.DynamicArray
 
             public bool MoveNext()
             {
+                _curIndex++;
                 if (_curIndex >= _collection.Length)
                     return false;
                 else
                 {
-                    Current = _collection[_curIndex++];
+                    Current = _collection[_curIndex];
                     return true;
                 }
             }
