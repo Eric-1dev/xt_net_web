@@ -49,7 +49,7 @@ namespace Eric.DynamicArray
 
                 /*for (i = 0; i < Math.Min(Length, value); i++)
                     _newArr[i] = _arr[i];*/
-                Length = CopyTo(_newArr, 0, Math.Min(Length, value));
+                Length = CopyTo(_newArr, 0, Math.Min(Length, value) - 1);
                 _arr = _newArr;
             }
         }
@@ -59,11 +59,33 @@ namespace Eric.DynamicArray
             if (Length == Capacity)
             {
                 T[] newArr = new T[Capacity * 2];
-                CopyTo(newArr, 0, Length);
+                CopyTo(newArr, 0, Length - 1);
                 _arr = newArr;
             }
             _arr[Length] = value;
             Length++;
+        }
+
+        public bool Insert(T value, int index)
+        {
+            if (index > Length) throw new ArgumentOutOfRangeException();
+
+            if (index == Length) { Add(value); return true; }    // Добавим возможность добавить элемент после последнего (т.е. в конец массива)
+
+            if ( Length == Capacity ) // Если длина не позволяет - расширяем массив
+            {
+                T[] newArr = new T[Capacity * 2];
+                CopyTo(newArr, 0, Length - 1);
+                _arr = newArr;
+            }
+
+            for (int i = Length - 1; i >= index; i--)
+            {
+                _arr[i + 1] = _arr[i];
+            }
+            _arr[index] = value;
+            Length++;
+            return true;
         }
         public void AddRange(IEnumerable<T> collection)
         {
@@ -74,7 +96,7 @@ namespace Eric.DynamicArray
             if ( Length + colCount > Capacity )
             {
                 T[] newArr = new T[Length + colCount];
-                CopyTo(newArr, 0, Length);
+                CopyTo(newArr, 0, Length - 1);
                 _arr = newArr;
             }
             int i = Length;
@@ -100,14 +122,17 @@ namespace Eric.DynamicArray
         public int CopyTo(Array newArr, int FirstIndex, int LastIndex)
         {
             if (FirstIndex > LastIndex) throw new ArgumentException();
-            if (LastIndex > Length) throw new ArgumentOutOfRangeException();
+            if (LastIndex >= Length) throw new ArgumentOutOfRangeException();
             int j = 0;
-            for (int i = FirstIndex; i < LastIndex; i++)
+            for (int i = FirstIndex; i <= LastIndex; i++)
             {
                 newArr.SetValue(_arr[i], j++);
             }
             return j;
         }
+
+        public int CopyTo(Array newArr, int FirstIndex) => CopyTo(newArr, FirstIndex, Length - 1);
+
         public T this[int index]
         {
             get
@@ -166,8 +191,8 @@ namespace Eric.DynamicArray
 
         public class Enumerator<U> : IEnumerator<T>
         {
-            private DynamicArray<T> _collection;
-            private int _curIndex;
+            protected DynamicArray<T> _collection;
+            protected int _curIndex;
 
             public Enumerator(DynamicArray<T> collection)
             {
@@ -200,5 +225,70 @@ namespace Eric.DynamicArray
                 _curIndex = -1;
             }
         }
+    }
+
+    public class CycledDynamicArray<T> : DynamicArray<T>, IEnumerable<T>
+    {
+        public CycledDynamicArray() : base() { }
+        public CycledDynamicArray(int n) : base(n) { }
+        public CycledDynamicArray(IEnumerable<T> collection) : base(collection) { }
+        public new IEnumerator<T> GetEnumerator() => new CycledEnumerator<T>(this);
+        IEnumerator IEnumerable.GetEnumerator() => new CycledEnumerator<T>(this);
+
+        public class CycledEnumerator<U> : Enumerator<T>, IEnumerator<T>
+        {
+            public CycledEnumerator(CycledDynamicArray<T> collection) : base(collection) { }
+            public new bool MoveNext()
+            {
+                _curIndex++;
+                if (_curIndex >= _collection.Length)
+                    _curIndex = 0;
+                Current = _collection[_curIndex];
+                return true;
+            }
+        }
+
+        /*
+         * Если поля в исходном Enumerator являются private
+         * или по какой-то другой причине мы не можем унаследоваться от него,
+         * то заново пишем реализацию IEnumerator с необходимым функционалом.
+         */
+
+        /*
+        public class CycledEnumerator<U> : IEnumerator<T>
+        {
+            protected CycledDynamicArray<T> _collection;
+            protected int _curIndex;
+
+            public CycledEnumerator(CycledDynamicArray<T> collection)
+            {
+                Current = default;
+                _curIndex = -1;
+                _collection = collection;
+            }
+
+            public T Current { get; internal set; }
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose() { }
+
+            public bool MoveNext()
+            {
+                _curIndex++;
+                if (_curIndex >= _collection.Length)
+                    _curIndex = 0;
+                Current = _collection[_curIndex];
+                return true;
+            }
+
+            public void Reset()
+            {
+                Current = default;
+                _curIndex = -1;
+            }
+        }
+        */
+
     }
 }
