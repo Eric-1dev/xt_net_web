@@ -28,7 +28,7 @@ namespace Task_3_3_1
             // Too simple for comment
             arr.Action(a => a * a);
 
-            arr.PrintArr();
+            arr.PrintArr("New array:");
         }
     }
 
@@ -45,6 +45,12 @@ namespace Task_3_3_1
             foreach (var item in arr)
                 Console.Write($"{item}\t");
             Console.WriteLine();
+        }
+
+        public static void PrintArr(this int[] arr, string comment)
+        {
+            Console.WriteLine(comment);
+            arr.PrintArr();
         }
 
         public static void FillRandom(this int[] arr, int min, int max)
@@ -66,6 +72,7 @@ namespace Task_3_3_1
             return arr.Average();
         }
 
+        // Grouping by value, ordering groups and select first of them
         public static int Prevalent(this int[] arr) => arr.GroupBy(a => a).OrderByDescending(b => b.Count()).FirstOrDefault().Key;
     }
 }
