@@ -66,6 +66,6 @@ namespace Task_3_3_1
             return arr.Average();
         }
 
-        public static int Prevalent(this int[] arr) => arr.GroupBy(a => a).OrderBy(a => a.Count()).LastOrDefault().Key;
+        public static int Prevalent(this int[] arr) => arr.GroupBy(a => a).OrderByDescending(b => b.Count()).FirstOrDefault().Key;
     }
 }
