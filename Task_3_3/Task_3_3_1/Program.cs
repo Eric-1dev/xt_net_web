@@ -19,11 +19,11 @@ namespace Task_3_3_1
             arr.Action(a => rnd.Next(-10, 10));
 
             // Printing array
-            arr = null;
             arr.PrintArr();
 
-            Console.WriteLine(arr.SumOfAll());
-            Console.WriteLine(arr.Avg());
+            Console.WriteLine("Sum of all elements: " + arr.SumOfAll());
+            Console.WriteLine("Average value of all elements: " + arr.Avg());
+            Console.WriteLine("Most prevalent element: " + arr.Prevalent());
 
             // Too simple for comment
             arr.Action(a => a * a);
@@ -66,10 +66,6 @@ namespace Task_3_3_1
             return arr.Average();
         }
 
-        //public static int Prevalent(this int[] arr)
-        //{
-            //var groups = arr.GroupBy<int[], >(arr.Count());
-            //var tmp = arr.Where(a => arr.Count(a => a));
-        //}
+        public static int Prevalent(this int[] arr) => arr.GroupBy(a => a).OrderBy(a => a.Count()).LastOrDefault().Key;
     }
 }
