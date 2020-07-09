@@ -72,7 +72,7 @@ namespace Task_3_3_1
             return arr.Average();
         }
 
-        // Grouping by value, ordering groups and select first of them
+        // Grouping by value, ordering groups by descending and select first of them
         public static int Prevalent(this int[] arr) => arr.GroupBy(a => a).OrderByDescending(b => b.Count()).FirstOrDefault().Key;
     }
 }
