@@ -68,7 +68,7 @@ namespace Eric.DynamicArray
 
         public bool Insert(T value, int index)
         {
-            if (index > Length) throw new ArgumentOutOfRangeException();
+            if (index > Length) throw new ArgumentOutOfRangeException("index", "Index must be greater than 0");
 
             if (index == Length) { Add(value); return true; }    // Добавим возможность добавить элемент после последнего (т.е. в конец массива)
 
@@ -121,8 +121,8 @@ namespace Eric.DynamicArray
         }
         public int CopyTo(Array newArr, int FirstIndex, int LastIndex)
         {
-            if (FirstIndex > LastIndex) throw new ArgumentException();
-            if (LastIndex >= Length) throw new ArgumentOutOfRangeException();
+            if (FirstIndex > LastIndex) throw new ArgumentException("FirstIndex, LastIndex", "FirstIndex must be less than LastIndex");
+            if (LastIndex >= Length) throw new ArgumentOutOfRangeException("LastIndex", "LastIndex must be less then Length");
             int j = 0;
             for (int i = FirstIndex; i <= LastIndex; i++)
             {
@@ -139,12 +139,12 @@ namespace Eric.DynamicArray
             {
                 if (index >= 0)
                 {
-                    if (index >= Length) throw new ArgumentOutOfRangeException();
+                    if (index >= Length) throw new ArgumentOutOfRangeException("index", "Index must be less than Length");
                     return _arr[index];
                 }
                 else
                 {
-                    if ( -index > Length ) throw new ArgumentOutOfRangeException();
+                    if ( -index > Length ) throw new ArgumentOutOfRangeException("index", "Negative index must be less or equal then Length");
                     return _arr[Length + index];
                 }
             }
@@ -153,12 +153,12 @@ namespace Eric.DynamicArray
             {
                 if (index >= 0)
                 {
-                    if (index >= Length) throw new ArgumentOutOfRangeException();
+                    if (index >= Length) throw new ArgumentOutOfRangeException("index", "Index must be less than Length");
                     _arr[index] = value;
                 }
                 else
                 {
-                    if (-index > Length) throw new ArgumentOutOfRangeException();
+                    if (-index > Length) throw new ArgumentOutOfRangeException("index", "Negative index must be less or equal then Length");
                     _arr[Length + index] = value;
                 }
             }
