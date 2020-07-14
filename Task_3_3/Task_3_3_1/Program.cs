@@ -36,12 +36,14 @@ namespace Task_3_3_1
     {
         public static void Action(this int[] arr, Func<int, int> act)
         {
+            if (arr == null) throw new NullReferenceException();
             for (int i = 0; i < arr.Length; i++)
                 arr[i] = act(arr[i]);
         }
 
         public static void PrintArr(this int[] arr)
         {
+            if (arr == null) throw new NullReferenceException();
             foreach (var item in arr)
                 Console.Write($"{item}\t");
             Console.WriteLine();
@@ -55,6 +57,7 @@ namespace Task_3_3_1
 
         public static void FillRandom(this int[] arr, int min, int max)
         {
+            if (arr == null) throw new NullReferenceException();
             Random rnd = new Random();
             for (int i = 0; i < arr.Length; i++)
                 arr[i] = rnd.Next(min, max);
