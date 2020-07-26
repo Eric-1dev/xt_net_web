@@ -8,16 +8,12 @@ using System.Threading.Tasks;
 namespace Task_4_1_1
 {
     // Единичный элемент истории изменений
-    class DiffNode : ISerializable
+    class DiffNode
     {
-        public DateTime Date { get; private set; }
-        public int StringNum { get; private set; }
-        public DiffTypes Action { get; private set; }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
-        }
+        public DateTime Date { get; internal set; }
+        public int StringNum { get; internal set; }
+        public DiffTypes Action { get; internal set; }
+        public string Text { get; internal set; }
     }
 
     enum DiffTypes

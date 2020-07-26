@@ -72,7 +72,7 @@ namespace Task_4_1_1
                     DeletingFile(e);
                     break;
                 case WatcherChangeTypes.Changed:
-                    ChangingFile(e);
+                    FindDiffs(e);
                     break;
                 default:
                     break;
@@ -111,47 +111,19 @@ namespace Task_4_1_1
             }
         }
 
-        private void ChangingFile(FileSystemEventArgs e)
+        private void FindDiffs(FileSystemEventArgs e)
         {
-            Thread.Sleep(10); // Немного поспим, т.к. изменения могуть быть частыми и файл не успеет разблокироваться
-            string[] content = ReadAllLines(e.FullPath);
-            string diffName = GetDiffFilename(e.FullPath);
+            string diffFullPath = GetDiffFilename(e.FullPath);
+            Diff diff = new Diff();
 
-            // Открываем файл изменений или создаем новый, если его нет
-            FileStream diffFileStream = null;
-            try
-            {
-                diffFileStream = new FileStream(diffName, FileMode.OpenOrCreate);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Cannot access diff-file", ex);
-            }
-            finally
-            {
-                if (diffFileStream != null)
-                    diffFileStream.Close();
-            }
 
+            diff.Compare(e.FullPath, diffFullPath);
+
+            
             /*foreach (var item in content)
             {
                 Console.WriteLine(item);
             }*/
-        }
-
-        // Свой ReadAllLines, который, в отличие от File.ReadAllLines считывает файл, даже если он открыт в блокноте
-        private string[] ReadAllLines(string path)
-        {
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (var streamReader = new StreamReader(fileStream))
-            {
-                LinkedList<string> file = new LinkedList<string>();
-
-                while (!streamReader.EndOfStream)
-                    file.AddLast(streamReader.ReadLine());
-                return file.ToArray();
-                
-            }
         }
 
         /// <summary>
@@ -167,7 +139,7 @@ namespace Task_4_1_1
         }
 
         // Проверяем файл на блокировку
-        private bool IsLocked(string path)
+        /*private bool IsLocked(string path)
         {
             try
             {
@@ -181,7 +153,7 @@ namespace Task_4_1_1
                 return true;
             }
             return false;
-        }
+        }*/
 
         private void Notify(string str)
         {
