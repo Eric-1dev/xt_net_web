@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -50,10 +51,17 @@ namespace Task_4_1_1
             }
         }
 
-        public void RestoreFileToDate(string fullPath, DateTime date)
+        public static void RestoreFileToDate(string fullPath, DateTime date)
         {
             Diff diff = new Diff();
-            diff.RestoreContentFormDiffFile(fullPath, date);
+            var content = diff.RestoreContentFormDiffFile(GetDiffFilename(fullPath), date);
+            if (content != null)
+            {
+                diff.WriteContentToFile(fullPath, content);
+                notify.Show("Done.");
+            }
+            else
+                notify.Show("History is empty. Recovering unavailable.");
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)
@@ -62,10 +70,10 @@ namespace Task_4_1_1
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Deleted:
-                    DeletingFile(e);
+                    DeletingFile(e.FullPath);
                     break;
                 case WatcherChangeTypes.Changed:
-                    FindDiffs(e);
+                    FindDiffs(e.FullPath);
                     break;
                 default:
                     break;
@@ -91,9 +99,9 @@ namespace Task_4_1_1
             }
         }
 
-        private void DeletingFile(FileSystemEventArgs e)
+        private void DeletingFile(string fullPath)
         {
-            string diffName = GetDiffFilename(e.FullPath);
+            string diffName = GetDiffFilename(fullPath);
             try
             {
                 File.Delete(diffName);
@@ -104,12 +112,12 @@ namespace Task_4_1_1
             }
         }
 
-        private void FindDiffs(FileSystemEventArgs e)
+        private void FindDiffs(string fullPath)
         {
-            string diffFullPath = GetDiffFilename(e.FullPath);
+            string diffFullPath = GetDiffFilename(fullPath);
             Diff diff = new Diff();
 
-            var result = diff.Compare(e.FullPath, diffFullPath);
+            var result = diff.Compare(fullPath, diffFullPath);
             if (result != null)
                 diff.WriteHistoryToFile(diffFullPath, result);
         }
@@ -119,7 +127,7 @@ namespace Task_4_1_1
         /// </summary>
         /// <param name="file"></param>
         /// <returns>name of diff-file from FullPath</returns>
-        private string GetDiffFilename(string FullPath)
+        private static string GetDiffFilename(string FullPath)
         {
             var str = new StringBuilder(FullPath);
             str[str.Length - 1] = '_';

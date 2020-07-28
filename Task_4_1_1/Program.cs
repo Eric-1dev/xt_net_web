@@ -18,7 +18,7 @@ namespace Task_4_1_1
             {
                 case 2:
                     var dir = Environment.GetCommandLineArgs()[1];
-                    if (IsPathCorrect(dir))
+                    if (IsDirectoryNameCorrect(dir))
                     {
                         var watcher = new Watcher(dir);
                         watcher.Run();
@@ -30,9 +30,9 @@ namespace Task_4_1_1
                     var file = Environment.GetCommandLineArgs()[1];
                     var dateString = Environment.GetCommandLineArgs()[2];
                     DateTime date;
-                    if (IsPathCorrect(file) && DateTime.TryParse(dateString, out date))
+                    if (IsFileNameCorrect(file) && DateTime.TryParse(dateString, out date))
                     {
-
+                        Watcher.RestoreFileToDate(file, date);
                     }
                     break;
                 default:
@@ -43,10 +43,18 @@ namespace Task_4_1_1
             }
         }
 
-        public static bool IsPathCorrect(string _path)
+        public static bool IsDirectoryNameCorrect(string _dir)
         {
-            var path = new FileInfo(_path);
-            if (path.Exists)
+            var dir = new DirectoryInfo(_dir);
+            if (dir.Exists)
+                return true;
+            return false;
+        }
+
+        public static bool IsFileNameCorrect(string _filename)
+        {
+            var filename = new FileInfo(_filename);
+            if (filename.Exists)
                 return true;
             return false;
         }

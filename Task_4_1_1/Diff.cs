@@ -89,6 +89,25 @@ namespace Task_4_1_1
             return null;
         }
 
+        internal void WriteContentToFile(string fileFullPath, IEnumerable<string> content)
+        {
+            FileStream fileStream;
+            StreamWriter writer;
+            try
+            {
+                fileStream = new FileStream(fileFullPath, FileMode.Open);
+                writer = new StreamWriter(fileStream);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot access diff-file", ex);
+            }
+            foreach (var line in content)
+                writer.WriteLine(line);
+
+            writer.Close();
+            fileStream.Close();
+        }
         internal void WriteHistoryToFile(string diffFullPath, IEnumerable<DiffNode> diffs)
         {
             IEnumerable<string> history;
@@ -107,9 +126,7 @@ namespace Task_4_1_1
 
             history = Serialize(diffs);
             foreach (var line in history)
-            {
                 writer.WriteLine(line);
-            }
 
             writer.Close();
             diffFileStream.Close();
@@ -170,7 +187,6 @@ namespace Task_4_1_1
         private IEnumerable<string> RestoreContentFromHistory(IEnumerable<string> history, DateTime date)
         {
             var diffs = Deserialize(history);
-
             List<string> content = new List<string>();
 
             foreach (var node in diffs)
@@ -196,6 +212,8 @@ namespace Task_4_1_1
         {
             var history = new List<string>(ReadAllLines(diffFilePath, FileMode.OpenOrCreate));
             var content = RestoreContentFromHistory(history, date);
+            if (content.Count() == 0)
+                return null;
             return content;
         }
     }
