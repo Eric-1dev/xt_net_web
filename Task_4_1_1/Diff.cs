@@ -15,84 +15,90 @@ namespace Task_4_1_1
         private LinkedList<DiffNode> _diffs = new LinkedList<DiffNode>();
         private int _maxStringNum;
 
-        public void Compare(string sourceFilePath, string historyFilePath)
+        public IEnumerable<DiffNode> Compare(string sourceFilePath, string diffFilePath)
         {
-            Thread.Sleep(10); // Немного поспим, т.к. изменения могуть быть частыми и файл не успеет разблокироваться
             List<string> content = ReadAllLines(sourceFilePath, FileMode.Open);
-            List<string> history = ReadAllLines(historyFilePath, FileMode.OpenOrCreate);
+            List<string> history = ReadAllLines(diffFilePath, FileMode.OpenOrCreate);
 
             List<string> previous = RestoreContentFromHistory(history);
 
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now; // Запонимаем дату текущих изменений
 
-            var diffsAdd = new List<DiffNode>();
-            var diffsDel = new List<DiffNode>();
+            var diffsAdd = new List<DiffNode>(); // Список того, что нужно добавить в исходный файл, чтобы получить новый
+            var diffsDel = new List<DiffNode>(); // Список того, что нужно удалить
 
-            // Тут творится такая магия, что студенты Хогвардса нервно курят свои палочки
-            bool flag = true;
+            // Считываем строки нового файла во временный массив diffsAdd
             for (int i = 0; i < content.Count; i++)
             {
-                //if (!content[i].Equals(previous.ElementAtOrDefault(i)))
-                {
-                    //flag = false;
-                    DiffNode node = new DiffNode();
-                    node.Action = DiffTypes.Add;
-                    node.Date = now;
-                    node.StringNum = i;
-                    node.Text = content[i];
-                    diffsAdd.Add(node);
-                    previous.Insert(i, content[i]);
-                }
+                DiffNode node = new DiffNode();
+                node.Action = DiffTypes.Add;
+                node.Date = now;
+                node.StringNum = i;
+                node.Text = content[i];
+                diffsAdd.Add(node);
             }
 
-            for (int i = content.Count; i < previous.Count; i++)
+            bool flag;
+            int m = content.Count;
+
+            // Удаляем все строки из старого файла, записывая изменения в diffsDel.
+            // При этом выясняем, какие пары из diffsAdd и diffsDel друг друга компенсируют
+            for (int i = 0; i < previous.Count; i++)
             {
                 DiffNode node = new DiffNode();
                 node.Action = DiffTypes.Delete;
                 node.Date = now;
-                node.StringNum = i;
+                node.StringNum = content.Count;
                 node.Text = previous[i];
                 flag = true;
                 for (int j = 0; j < diffsAdd.Count; j++)
                 {
                     if (node.Text.Equals(diffsAdd.ElementAt(j).Text))
                     {
-                        Console.WriteLine($"CurNum = {node.StringNum} - At_j = {diffsAdd.ElementAt(j).StringNum} == add.Count = {diffsAdd.Count} - j = {j}  Text = {node.Text}");
-                        if (node.StringNum - diffsAdd.ElementAt(j).StringNum == diffsAdd.Count - j )
+                        if (node.StringNum - diffsAdd.ElementAt(j).StringNum == diffsAdd.Count - j)
                         {
-                            Console.WriteLine("Found!!!");
                             diffsAdd.RemoveAt(j);
-                            flag = false;
-                            foreach (var item in diffsDel)
-                                item.StringNum--;
+                            m--; // Корректируем номер удаляемой строки
+                            flag = false; // Если нашли пару для удаляемой строчки - не записываем в список изменений
                             break;
                         }
                     }
                 }
-                Console.WriteLine();
                 if (flag)
                 {
+                    node.StringNum -= m;
                     diffsDel.Add(node);
                 }
-                previous.RemoveAt(i);
-                i--;
             }
 
-            foreach (var item in diffsAdd)
+            // Если нет изменений - не дергаем файл
+            if (diffsAdd.Count != 0 || diffsDel.Count != 0)
             {
-                _diffs.AddLast(item);
+
+                foreach (var item in diffsDel)
+                {
+                    _diffs.AddLast(item);
+                }
+                foreach (var item in diffsAdd)
+                {
+                    _diffs.AddLast(item);
+                }
+
+                return _diffs;
+                //WriteHistoryToFile(diffFilePath, history);
             }
-            foreach (var item in diffsDel)
-            {
-                _diffs.AddLast(item);
-            }
-            
+            return null;
+
+        }
+
+        public void WriteHistoryToFile(string diffFilePath, IEnumerable<string> history)
+        {
             // Открываем файл изменений
             FileStream diffFileStream;
             StreamWriter writer;
             try
             {
-                diffFileStream = new FileStream(historyFilePath, FileMode.Open);
+                diffFileStream = new FileStream(diffFilePath, FileMode.Open);
                 writer = new StreamWriter(diffFileStream);
             }
             catch (Exception ex)
@@ -113,6 +119,7 @@ namespace Task_4_1_1
         // Свой ReadAllLines, который, в отличие от File.ReadAllLines считывает файл, даже если он открыт в блокноте
         private List<string> ReadAllLines(string path, FileMode mode)
         {
+            Thread.Sleep(10); // Немного поспим, т.к. изменения могуть быть частыми и файл не успеет разблокироваться
             using (var fileStream = new FileStream(path, mode, FileAccess.Read, FileShare.ReadWrite))
             using (var streamReader = new StreamReader(fileStream))
             {
@@ -124,7 +131,7 @@ namespace Task_4_1_1
             }
         }
 
-        private List<string> Serialize()
+        private IEnumerable<string> Serialize()
         {
             LinkedList<string> lines = new LinkedList<string>();
             foreach (var diff in _diffs)
@@ -133,7 +140,7 @@ namespace Task_4_1_1
             }
             return lines.ToList<string>();
         }
-        private bool Deserialize(List<string> history)
+        private bool Deserialize(IEnumerable<string> history)
         {
             _diffs.Clear();
             _maxStringNum = 0;
@@ -160,7 +167,7 @@ namespace Task_4_1_1
             return true;
         }
 
-        private List<string> RestoreContentFromHistory(List<string> history)
+        private List<string> RestoreContentFromHistory(IEnumerable<string> history)
         {
             Deserialize(history);
 

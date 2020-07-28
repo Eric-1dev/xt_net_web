@@ -13,33 +13,17 @@ namespace Task_4_1_1
     class Watcher
     {
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        public void Run()
+        public void Run(string directory)
         {
-            string[] args = Environment.GetCommandLineArgs();
-
-            // If a directory is not specified, exit program.
-            /*if (args.Length != 2)
-            {
-                // Display the proper way to call the program.
-                Console.WriteLine("Usage: Watcher.exe (directory)");
-                return;
-            }*/
-
             // Create a new FileSystemWatcher and set its properties.
-            using (FileSystemWatcher fsWatcher = new FileSystemWatcher(@"D:\123", "*.txt"))
+            using (FileSystemWatcher fsWatcher = new FileSystemWatcher(directory, "*.txt"))
             {
-                //watcher.Path = args[1];
-                //watcher.Path = @"D:\123";
-
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
                 fsWatcher.NotifyFilter = NotifyFilters.LastAccess
                                      | NotifyFilters.LastWrite
                                      | NotifyFilters.FileName
                                      | NotifyFilters.DirectoryName;
-
-                // Only watch text files.
-                //watcher.Filter = "*.txt";
 
                 // Include subdirectories
                 fsWatcher.IncludeSubdirectories = true;
@@ -54,20 +38,21 @@ namespace Task_4_1_1
                 fsWatcher.EnableRaisingEvents = true;
 
                 // Wait for the user to quit the program.
-                Console.WriteLine("Press 'q' to quit.");
-                while (Console.Read() != 'q') ;
+                Console.WriteLine("Press <Escape> to exit.");
+                while (Console.ReadKey().Key != ConsoleKey.Escape) ;
             }
         }
 
         // Define the event handlers.
         private void OnChanged(object source, FileSystemEventArgs e)
         {
+            INotify notify = new Notify();
             // Specify what is done when a file is changed, created, or deleted.
-            Notify($"File: {e.FullPath} {e.ChangeType}");
+            notify.Show($"File: {e.FullPath} {e.ChangeType}");
             switch (e.ChangeType)
             {
-                case WatcherChangeTypes.Created:
-                    break;
+                //case WatcherChangeTypes.Created:
+                //    break;
                 case WatcherChangeTypes.Deleted:
                     DeletingFile(e);
                     break;
@@ -81,12 +66,12 @@ namespace Task_4_1_1
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
-            // Specify what is done when a file is renamed.
+            // Переименовываем файл изменений, если переименован исходный
             string oldDiffName = GetDiffFilename(e.OldFullPath);
             string newDiffName = GetDiffFilename(e.FullPath);
             try
             {
-                File.Move(oldDiffName, newDiffName); // Переименовываем файл изменений, если переименован исходный
+                File.Move(oldDiffName, newDiffName);
             }
             catch (FileNotFoundException)
             {
@@ -119,11 +104,7 @@ namespace Task_4_1_1
 
             diff.Compare(e.FullPath, diffFullPath);
 
-            
-            /*foreach (var item in content)
-            {
-                Console.WriteLine(item);
-            }*/
+
         }
 
         /// <summary>
@@ -136,28 +117,6 @@ namespace Task_4_1_1
             var str = new StringBuilder(FullPath);
             str[str.Length - 1] = '_';
             return str.ToString();
-        }
-
-        // Проверяем файл на блокировку
-        /*private bool IsLocked(string path)
-        {
-            try
-            {
-                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    fileStream.Close();
-                }
-            }
-            catch
-            {
-                return true;
-            }
-            return false;
-        }*/
-
-        private void Notify(string str)
-        {
-            Console.WriteLine($"{str} + time: { DateTime.Now}");
         }
     }
 }

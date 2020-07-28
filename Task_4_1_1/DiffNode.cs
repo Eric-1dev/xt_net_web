@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Task_4_1_1
 {
     // Единичный элемент истории изменений
-    class DiffNode
+    internal class DiffNode
     {
         public DateTime Date { get; internal set; }
         public int StringNum { get; internal set; }
