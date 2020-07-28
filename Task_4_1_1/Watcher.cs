@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,16 +13,22 @@ namespace Task_4_1_1
 {
     class Watcher
     {
+        private string _directory;
+        private static INotify notify = new Notify();
+        public Watcher(string directory)
+        {
+            _directory = directory;
+        }
+
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        public void Run(string directory)
+        public void Run()
         {
             // Create a new FileSystemWatcher and set its properties.
-            using (FileSystemWatcher fsWatcher = new FileSystemWatcher(directory, "*.txt"))
+            using (FileSystemWatcher fsWatcher = new FileSystemWatcher(_directory, "*.txt"))
             {
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
-                fsWatcher.NotifyFilter = NotifyFilters.LastAccess
-                                     | NotifyFilters.LastWrite
+                fsWatcher.NotifyFilter = NotifyFilters.LastWrite
                                      | NotifyFilters.FileName
                                      | NotifyFilters.DirectoryName;
 
@@ -43,16 +50,17 @@ namespace Task_4_1_1
             }
         }
 
-        // Define the event handlers.
+        public void RestoreFileToDate(string fullPath, DateTime date)
+        {
+            Diff diff = new Diff();
+            diff.RestoreContentFormDiffFile(fullPath, date);
+        }
+
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            INotify notify = new Notify();
-            // Specify what is done when a file is changed, created, or deleted.
             notify.Show($"File: {e.FullPath} {e.ChangeType}");
             switch (e.ChangeType)
             {
-                //case WatcherChangeTypes.Created:
-                //    break;
                 case WatcherChangeTypes.Deleted:
                     DeletingFile(e);
                     break;
@@ -101,10 +109,9 @@ namespace Task_4_1_1
             string diffFullPath = GetDiffFilename(e.FullPath);
             Diff diff = new Diff();
 
-
-            diff.Compare(e.FullPath, diffFullPath);
-
-
+            var result = diff.Compare(e.FullPath, diffFullPath);
+            if (result != null)
+                diff.WriteHistoryToFile(diffFullPath, result);
         }
 
         /// <summary>

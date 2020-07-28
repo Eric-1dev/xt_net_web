@@ -13,18 +13,42 @@ namespace Task_4_1_1
     {
         static void Main(string[] args)
         {
-            if (Environment.GetCommandLineArgs().Length != 2 && Environment.GetCommandLineArgs().Length != 3)
+            INotify notify = new Notify();
+            switch (Environment.GetCommandLineArgs().Length)
             {
-                Console.WriteLine($"Usage: {Environment.NewLine}\t{Path.GetFileName(Environment.GetCommandLineArgs()[0])} <directory-name> - for watching" +
+                case 2:
+                    var dir = Environment.GetCommandLineArgs()[1];
+                    if (IsPathCorrect(dir))
+                    {
+                        var watcher = new Watcher(dir);
+                        watcher.Run();
+                    }
+                    else
+                        notify.Show("Directory name is incorrect");
+                    break;
+                case 3:
+                    var file = Environment.GetCommandLineArgs()[1];
+                    var dateString = Environment.GetCommandLineArgs()[2];
+                    DateTime date;
+                    if (IsPathCorrect(file) && DateTime.TryParse(dateString, out date))
+                    {
+
+                    }
+                    break;
+                default:
+                    Console.WriteLine($"Usage: {Environment.NewLine}\t{Path.GetFileName(Environment.GetCommandLineArgs()[0])} <directory-name> - for watching" +
                                          $"{Environment.NewLine}\t{Path.GetFileName(Environment.GetCommandLineArgs()[0])} <fullpath-to-file> <recovery-date> - for recover file on selected date");
-                Console.ReadKey();
-                return;
+                    Console.ReadKey();
+                    break;
             }
-            if (Environment.GetCommandLineArgs().Length == 2)
-            {
-                Watcher watcher = new Watcher();
-                watcher.Run(Environment.GetCommandLineArgs()[1]);
-            }
+        }
+
+        public static bool IsPathCorrect(string _path)
+        {
+            var path = new FileInfo(_path);
+            if (path.Exists)
+                return true;
+            return false;
         }
     }
 }
