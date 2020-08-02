@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Diff.cs" />
     <Compile Include="DiffNode.cs" />
+    <Compile Include="MyFileMFuncs.cs" />
+    <Compile Include="Indexer.cs" />
     <Compile Include="INotify.cs" />
     <Compile Include="Notify.cs" />
     <Compile Include="Program.cs" />

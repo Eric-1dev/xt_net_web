@@ -15,12 +15,14 @@ namespace Task_4_1_1
     {
         internal IEnumerable<DiffNode> Compare(string sourceFilePath, string diffFilePath)
         {
-            var content = new List<string>(ReadAllLines(sourceFilePath, FileMode.Open));
-            
-            var history = new List<string>(ReadAllLines(diffFilePath, FileMode.OpenOrCreate));
+            var content = new List<string>(MyFileMFuncs.ReadAllLines(sourceFilePath, FileMode.Open));
+            var history = new List<string>(MyFileMFuncs.ReadAllLines(diffFilePath, FileMode.OpenOrCreate));
             var diffs = new LinkedList<DiffNode>(Deserialize(history));
 
             var previous = new List<string>(RestoreContentFromHistory(history));
+
+            if (Indexer.StringArrMD5(content) == Indexer.StringArrMD5(previous)) // Если хэши совпадают - изменений нет
+                return null;
 
             DateTime currentDate = DateTime.Now; // Запонимаем дату текущих изменений
 
@@ -132,21 +134,6 @@ namespace Task_4_1_1
             diffFileStream.Close();
         }
 
-        // Свой ReadAllLines, который, в отличие от File.ReadAllLines считывает файл, даже если он открыт в блокноте
-        private IEnumerable<string> ReadAllLines(string path, FileMode mode)
-        {
-            Thread.Sleep(10); // Немного поспим, т.к. изменения могуть быть частыми и файл не успеет разблокироваться
-            using (var fileStream = new FileStream(path, mode, FileAccess.Read, FileShare.ReadWrite))
-            using (var streamReader = new StreamReader(fileStream))
-            {
-                LinkedList<string> file = new LinkedList<string>();
-
-                while (!streamReader.EndOfStream)
-                    file.AddLast(streamReader.ReadLine());
-                return file.ToList<string>();
-            }
-        }
-
         private IEnumerable<string> Serialize(IEnumerable<DiffNode> diffs)
         {
             LinkedList<string> lines = new LinkedList<string>();
@@ -210,7 +197,7 @@ namespace Task_4_1_1
 
         internal IEnumerable<string> RestoreContentFormDiffFile(string diffFilePath, DateTime date)
         {
-            var history = new List<string>(ReadAllLines(diffFilePath, FileMode.OpenOrCreate));
+            var history = new List<string>(MyFileMFuncs.ReadAllLines(diffFilePath, FileMode.OpenOrCreate));
             var content = RestoreContentFromHistory(history, date);
             if (content.Count() == 0)
                 return null;

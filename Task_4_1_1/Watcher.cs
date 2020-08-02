@@ -15,6 +15,7 @@ namespace Task_4_1_1
     class Watcher
     {
         private string _directory;
+        private string _fileTypes = "*.txt";
         private static INotify notify = new Notify();
         public Watcher(string directory)
         {
@@ -25,7 +26,7 @@ namespace Task_4_1_1
         public void Run()
         {
             // Create a new FileSystemWatcher and set its properties.
-            using (FileSystemWatcher fsWatcher = new FileSystemWatcher(_directory, "*.txt"))
+            using (FileSystemWatcher fsWatcher = new FileSystemWatcher(_directory, _fileTypes))
             {
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -44,6 +45,10 @@ namespace Task_4_1_1
 
                 // Begin watching.
                 fsWatcher.EnableRaisingEvents = true;
+
+                // Check index-file
+                var backgroudChecker = new Thread(backgroundCheck);
+                backgroudChecker.Start();
 
                 // Wait for the user to quit the program.
                 Console.WriteLine("Press <Escape> to exit.");
@@ -132,6 +137,25 @@ namespace Task_4_1_1
             var str = new StringBuilder(FullPath);
             str[str.Length - 1] = '_';
             return str.ToString();
+        }
+
+        private void backgroundCheck()
+        {
+            // TODO: checking changes in all files, logging history and correcting index-file
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                throw new IOException("Cannot create index-file", ex);
+            }
+            var dir = new DirectoryInfo(_directory);
+            var files = dir.GetFiles(_fileTypes, SearchOption.AllDirectories);
+            foreach (var file in files)
+            {
+                
+            }
         }
     }
 }
