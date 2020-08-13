@@ -2,14 +2,11 @@
 
 let str = '3.5 + 4 * 10 - 5.3 / 5 =';
 
-let numbers = Array();
-let operators = Array();
-
 if (!isCorrectInput(str))
     return;
 
-numbers = getNumbers(str);
-operators = getOperators(str);
+let numbers = getNumbers(str);
+let operators = getOperators(str);
 
 let j = 0;
 let result = parseFloat(numbers[0]);

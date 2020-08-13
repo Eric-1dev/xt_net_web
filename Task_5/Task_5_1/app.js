@@ -2,11 +2,9 @@
 
 let str = 'У попа была собака';
 
-let wordsArr = Array();
+let charsToDelete = [];
 
-let charsToDelete = Array();
-
-wordsArr = splitMulti(str, ['?', '!', ':', ';', ',', '.', '\n', '\t', ' ']);
+let wordsArr = splitMulti(str, ['?', '!', ':', ';', ',', '.', '\n', '\t', ' ']);
 
 for (let i = 0; i < wordsArr.length; i++) { // Каждое слово
     for (let j = 0; j < wordsArr[i].length; j++) { // Каждая буква в слове
