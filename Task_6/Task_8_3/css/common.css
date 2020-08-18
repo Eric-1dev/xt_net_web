@@ -1,0 +1,43 @@
+html {
+    background-color: #333333;
+}
+
+.wrapper {
+    color: white;
+    padding: 5px;
+}
+
+    .wrapper > div {
+        background-color: #88B7D5;
+        border-width: 5px;
+        border-color: #C2E1F5;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+.triangle {
+    width: 50px;
+    height: 50px;
+    transform: rotate(45deg) translate(20px, 20px);
+    border-style: solid none none solid;
+}
+
+.rectangle {
+    width: 100%;
+    border-style: solid;
+    height: 3em;
+    /* »ли так
+    #display: flex;
+    #align-items: center;
+    #justify-content: center;
+     »ли так */
+    display: table;
+    vertical-align: middle;
+    table-layout: fixed;
+    text-align: center;
+}
+
+.rectangle p {
+    font-size: 18px;
+    position:relative;
+}

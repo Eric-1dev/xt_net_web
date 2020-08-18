@@ -1,0 +1,41 @@
+.form_wrapper {
+    border: solid #0075B2 3px;
+    width: 400px;
+    background-color: #0690CF;
+    color: #FFFFFF;
+    font-family: Arial;
+}
+
+.form_wrapper > div {
+    padding: 20px;
+}
+
+.form_wrapper .data > div {
+    padding: 20px 25px 0 0;
+}
+
+.form_wrapper input[type=text], .form_wrapper input[type=password] {
+    width: 100%;
+}
+
+.form_wrapper .header {
+    border-bottom: 1px solid #FFFFFF;
+    font-size: 1.3em;
+}
+
+.form_wrapper .data {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.form_wrapper .email {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.form_wrapper .footer input[type=submit] {
+    background-color: #FFDF7F;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}

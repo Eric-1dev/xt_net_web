@@ -83,7 +83,7 @@ console.log("Storage state 2:");
 console.log(storage.getAll());
 
 // Testing Delete
-var delUser = storage.deleteById(user1.id);
+let delUser = storage.deleteById(user1.id);
 
 console.log("Storage state 3:");
 console.log(storage.getAll());
