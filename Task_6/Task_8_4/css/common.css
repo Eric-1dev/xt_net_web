@@ -48,4 +48,9 @@ body {
     border-radius: 3px;
     font-size: 1em;
     padding: 7px 15px;
+    cursor: pointer;
+}
+
+.layer4 button:active {
+    background-color: #E54800;
 }
