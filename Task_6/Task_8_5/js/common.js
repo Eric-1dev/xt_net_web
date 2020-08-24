@@ -26,8 +26,7 @@ function Ready() {
 }
 
 function FindInput() {
-    let text = document.getElementById("find_text").innerHTML;
-
+    let text = document.getElementById("find_text").value.toLowerCase().trim();
     let notes = document.getElementsByClassName("note");
 
     if (text == "") {
@@ -35,10 +34,10 @@ function FindInput() {
             ElemVisibilityTrigger(notes[i], true);
         }
     }
-
     else {
         for (let i = 0; i < notes.length; i++) {
-            if (notes.querySelector(".header").innerHTML.toLowerCase() == text.toLowerCase())
+            if (notes[i].querySelector(".note_header").innerHTML.toLowerCase().indexOf(text) != -1 || 
+                notes[i].querySelector(".note_text").innerHTML.toLowerCase().indexOf(text) != -1)
                 ElemVisibilityTrigger(notes[i], true);
             else
                 ElemVisibilityTrigger(notes[i], false);
