@@ -47,8 +47,8 @@
             if (this.arr[i].id == id) {
                 for (let prop in newObj) {
                     this.arr[i][prop] = newObj[prop];
-                    return true;
                 }
+                return true;
             }
         }
         return false;

@@ -10,17 +10,25 @@
     <div class="wrapper">
         <div class="header">
             <div class="search">
-                <div><img src="img/find.png" alt="Поиск" /></div>
-                <input type="text" placeholder="Поиск" />
+                <div><img src="img/find.png" id="search_but" alt="Поиск" /></div>
+                <input type="text" id="find_text" placeholder="Поиск" />
             </div>
         </div>
-        <div class="notes">
-            <div class="note">
-                <div class="note_header">Note Header</div>
-                <div class="note_text">Note Text</div>
-                <div class="delete_note"><img src="img/delete.png" alt="Удалить" /></div>
+        <div id="notes_wrapper">
+        </div>
+        <div id="add">+</div>
+        <div class="disabled" id="blocker">
+            <div class="win_wrapper">
+                <div class="win">
+                    <div class="win_header"><input type="text" id="win_header_text" placeholder="Введите заголовок"></div>
+                    <div class="win_text"><textarea id="win_text_text" placeholder="Содержание"></textarea></div>
+                    <div class="Win_footer">
+                        <button id="but_save">Сохранить</button>
+                        <button id="but_close">Закрыть</button>
+                    </div>
+                    <input type="hidden" id="win_id"/>
+                </div>
             </div>
-            <div id="add">+</div>
         </div>
     </div>
 </body>

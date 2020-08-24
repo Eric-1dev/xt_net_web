@@ -11,7 +11,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>46771bb7-a1fa-4d7c-9c2b-e79d66d001b8</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>server.js</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -28,9 +29,20 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="server.js" />
-    <Content Include="package.json" />
+    <Content Include="css\common.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="index.html" />
+    <Content Include="js\common.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="js\storage.js" />
     <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="css\" />
+    <Folder Include="js\" />
+    <Folder Include="img\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
