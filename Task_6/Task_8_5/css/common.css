@@ -127,15 +127,21 @@ img {
     border-radius: 10px;
     box-shadow: 0 0 5px 0 #555;
     /*padding: 5px;*/
+    display: grid;
+    grid-template-rows: 2.5em auto 30px;
 }
 
 .win>div {
     padding: 5px;
 }
 
+.win_header, .win_text {
+    margin: 5px;
+}
+
 .win_text textarea {
     width: 100%;
-    height: 70%;
+    height: 100%;
     background-color: inherit;
     border: none;
     resize: none;

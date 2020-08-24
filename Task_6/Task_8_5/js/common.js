@@ -43,8 +43,6 @@ function FindInput() {
                 ElemVisibilityTrigger(notes[i], false);
         }
     }
-
-    // TODO filter notes
 }
 
 function ElemVisibilityTrigger(elem, visibility) {
