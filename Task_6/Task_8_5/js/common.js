@@ -26,7 +26,7 @@ function Ready() {
     win_header_text.addEventListener("keyup", ClearWarning);
     win_text_text.addEventListener("keyup", ClearWarning);
 
-    //GetNotesFromStorage();
+    GetNotesFromStorage();
 }
 
 function FindInput() {
@@ -134,7 +134,7 @@ function PrintNote(note) {
 function GetNotesFromStorage() {
     let notes = storage.getAll();
 
-    for (let i = notes.length; i >= 0; i--) {
+    for (let i = notes.length - 1; i >= 0; i--) {
         PrintNote(notes[i]);
     }
 }
