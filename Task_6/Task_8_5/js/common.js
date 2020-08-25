@@ -15,14 +15,18 @@ function Ready() {
     let add_but = document.getElementById("add");
     let but_close = document.getElementById("but_close");
     let but_save = document.getElementById("but_save");
+    let win_header_text = document.getElementById("win_header_text");
+    let win_text_text = document.getElementById("win_text_text");
 
     find_text.addEventListener("keyup", FindInput);
     search_but.addEventListener("click", FindInput);
     add_but.addEventListener("click", AddNote);
     but_close.addEventListener("click", WindowClose);
     but_save.addEventListener("click", SaveNote);
+    win_header_text.addEventListener("keyup", ClearWarning);
+    win_text_text.addEventListener("keyup", ClearWarning);
 
-    GetNotesFromStorage();
+    //GetNotesFromStorage();
 }
 
 function FindInput() {
@@ -83,6 +87,14 @@ function NotesClearHTML() {
     notes_wrapper.innerHTML = "";
 }
 
+function ClearWarning() {
+    let win_header_text = document.getElementById("win_header_text");
+    let win_text_text = document.getElementById("win_text_text");
+
+    win_header_text.classList.remove("warning");
+    win_text_text.classList.remove("warning");
+}
+
 function PrintNote(note) {
     let notes_wrapper = document.getElementById("notes_wrapper");
 
@@ -122,7 +134,7 @@ function PrintNote(note) {
 function GetNotesFromStorage() {
     let notes = storage.getAll();
 
-    for (let i = 0; i < notes.length; i++) {
+    for (let i = notes.length; i >= 0; i--) {
         PrintNote(notes[i]);
     }
 }
@@ -160,9 +172,18 @@ function GetNoteDOMFromId(id) {
 }
 
 function SaveNote() {
-    let header = document.getElementById("win_header_text").value;
-    let text = document.getElementById("win_text_text").value;
+    let header_node = document.getElementById("win_header_text");
+    let text_node = document.getElementById("win_text_text");
+    let header = header_node.value;
+    let text = text_node.value;
     let id = document.getElementById("win_id").value;
+
+    if (header == "" && text == "") {
+        header_node.classList.add("warning");
+        text_node.classList.add("warning");
+        return;
+    }
+
     let note = new Note(header, text);
 
     if (id == "")
