@@ -6,9 +6,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security;
 using System.ServiceProcess;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace CrossWatcher
@@ -20,7 +23,7 @@ namespace CrossWatcher
         {
             InitializeComponent();
             CanStop = true;
-            CanPauseAndContinue = true;
+            CanPauseAndContinue = false;
 
             watcher = new FileSystemWatcher();
             watcher.NotifyFilter = NotifyFilters.LastAccess
@@ -31,12 +34,19 @@ namespace CrossWatcher
             watcher.Created += OnChange;
             watcher.Changed += OnChange;
             watcher.Renamed += OnChange;
+            watcher.InternalBufferSize = 65536;
         }
 
         protected override void OnStart(string[] args)
         {
-            //watcher.Path = args[1];
-            watcher.Path = @"D:\123";
+            var path = Assembly.GetExecutingAssembly().Location;
+            var configPath = path.Replace(".exe", ".cfg");
+            string folder;
+            using (var sr = new StreamReader(configPath))
+            {
+                folder = sr.ReadLine();
+            }
+            watcher.Path = folder;
             watcher.EnableRaisingEvents = true;
         }
 
@@ -57,13 +67,13 @@ namespace CrossWatcher
                     RenameFile(e.FullPath, name.ToString());
                     return;
                 }
-                else if (name[0] == 'g')
+                if (name[0] == 'g')
                 {
                     name[0] = 'l';
                     RenameFile(e.FullPath, name.ToString());
                     return;
                 }
-                else if (name[0] == 'i' ||
+                if (name[0] == 'i' ||
                          name[0] == 'j' ||
                          name[0] == 'p' ||
                          name[0] == 'q')
@@ -71,58 +81,98 @@ namespace CrossWatcher
                     DeleteFile(e.FullPath);
                     return;
                 }
+                return;
             }
-            else if (name.ToString().Equals("Base.txt", StringComparison.OrdinalIgnoreCase))
+            if (Path.GetExtension(e.FullPath).Equals(".txt", StringComparison.OrdinalIgnoreCase))
             {
-                int i = 0;
-                do
+                StreamReader sr = null;
+                try
                 {
-                    i++;
-                    name = new StringBuilder($"Base_{i}.txt");
+                    sr = new StreamReader(e.FullPath);
+                    var content = sr.ReadLine();
+                    sr.Close();
+                    if (content.Split(';').Count() != 76)
+                    {
+                        DeleteFile(e.FullPath);
+                        return;
+                    }
                 }
-                while (File.Exists(e.FullPath.Replace(e.Name, name.ToString()).ToString()));
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    if (sr != null)
+                        sr.Close();
+                }
+                
+                if (name.ToString().Equals("Base.txt", StringComparison.OrdinalIgnoreCase))
+                {
+                    int i = 0;
+                    do
+                    {
+                        i++;
+                        name = new StringBuilder($"Base_{i}.txt");
+                    }
+                    while (File.Exists(e.FullPath.Replace(e.Name, name.ToString()).ToString()));
 
-                RenameFile(e.FullPath, name.ToString());
+                    RenameFile(e.FullPath, name.ToString());
+                    return;
+                }
                 return;
             }
-            else if (Path.GetExtension(e.FullPath).Equals(".dbf", StringComparison.OrdinalIgnoreCase) ||
-                     Path.GetExtension(e.FullPath).Equals(".xls", StringComparison.OrdinalIgnoreCase))
-            {
-                DeleteFile(e.FullPath);
-                return;
-            }
+            DeleteFile(e.FullPath);
+            return;
         }
 
         private static void RenameFile(string oldFullPath, string newName)
         {
-            var newFullPath = oldFullPath.Replace(Path.GetFileName(oldFullPath), newName);
-
-            try
+            Thread thread = new Thread(() =>
             {
+                var newFullPath = oldFullPath.Replace(Path.GetFileName(oldFullPath), newName);
 
-                if (File.Exists(newFullPath))
+                bool ready = false;
+                for (int i = 0; i < 10 && !ready; i++)
                 {
-                    File.Delete(newFullPath);
+                    try
+                    {
+                        if (File.Exists(newFullPath) && File.Exists(oldFullPath))
+                            File.Delete(newFullPath);
+
+                        File.Move(oldFullPath, newFullPath);
+                        ready = true;
+                    }
+                    catch (Exception)
+                    {
+                        // TODO nothing to do - it is a service, so log only
+                    }
                     Thread.Sleep(300);
                 }
-                File.Move(oldFullPath, newFullPath);
-            }
-            catch (Exception)
-            {
-                // TODO nothing to do - it is a service, so log only
-            }
+            });
+            thread.Start();
         }
 
         private static void DeleteFile(string fullPath)
         {
-            try
+            Thread thread = new Thread(() =>
             {
-                File.Delete(fullPath);
-            }
-            catch (Exception)
-            {
-                // TODO nothing to do - it's a service, so log only
-            }
+                bool ready = false;
+                for (int i = 0; i < 10 && !ready; i++)
+                {
+                    try
+                    {
+                        File.Delete(fullPath);
+                        ready = true;
+                    }
+                    catch (Exception)
+                    {
+                        // TODO nothing to do - it's a service, so log only
+                    }
+                    Thread.Sleep(300);
+                }
+
+            });
+            thread.Start();
         }
     }
 }
