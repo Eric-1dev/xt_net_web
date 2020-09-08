@@ -18,11 +18,11 @@ namespace UserAwards.DAL.File
         public const string AwardsFile = "Awards.txt";
         public const string LinksFile = "Links.txt";
 
-        public bool DeleteAwardById(Guid id) => DeleteObjectById<Award>(id, AwardsFile);
+        public bool DeleteAwardById(Guid id) => DeleteObjectById<Award>(id, AwardsFile); // TODO delete from Links
 
         public bool DeleteLinkById(Guid id) => DeleteObjectById<Link>(id, LinksFile);
 
-        public bool DeleteUserById(Guid id) => DeleteObjectById<User>(id, UsersFile);
+        public bool DeleteUserById(Guid id) => DeleteObjectById<User>(id, UsersFile); // TODO delete from Links
 
         public IEnumerable<Award> GetAllAwards() => GetAllObjects<Award>(AwardsFile);
 
