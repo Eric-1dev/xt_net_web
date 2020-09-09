@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UserAwards.Common\UserAwards.Common.csproj">
-      <Project>{f6c20610-1453-4d81-897a-4d0c333d6037}</Project>
-      <Name>UserAwards.Common</Name>
+    <ProjectReference Include="..\UserAwards.DAL.Interfaces\UserAwards.DAL.Interfaces.csproj">
+      <Project>{7D685440-AD3B-4AB6-810F-A53D9CEA18C9}</Project>
+      <Name>UserAwards.DAL.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\UserAwards.Entities\UserAwards.Entities.csproj">
       <Project>{c3884d1b-431f-4023-a6f6-9fdbfcc688ff}</Project>

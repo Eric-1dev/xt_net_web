@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleUserAwardsPL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,9 +51,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UserAwards.BLL.DR\UserAwards.BLL.DR.csproj">
+      <Project>{306C32B4-2C39-4DE0-8D45-BDCDB23829DE}</Project>
+      <Name>UserAwards.BLL.DR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserAwards.BLL.Interfaces\UserAwards.BLL.Interfaces.csproj">
+      <Project>{2A05D65C-7D90-4275-A65B-1305851A9B9D}</Project>
+      <Name>UserAwards.BLL.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UserAwards.Entities\UserAwards.Entities.csproj">
       <Project>{c3884d1b-431f-4023-a6f6-9fdbfcc688ff}</Project>
       <Name>UserAwards.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserAwards.PL.Interfaces\UserAwards.PL.Interfaces.csproj">
+      <Project>{89AA288A-EBB3-4161-9BEA-7B3705D0CCB8}</Project>
+      <Name>UserAwards.PL.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

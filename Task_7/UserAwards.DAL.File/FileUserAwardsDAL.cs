@@ -6,23 +6,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UserAwards.Common;
+using UserAwards.DAL.Interfaces;
 using UserAwards.Entities;
 
 namespace UserAwards.DAL.File
 {
-    class FileUserAwardsDAL : IUserAwardsDAL
+    public class FileUserAwardsDAL : IUserAwardsDAL
     {
         public static string WorkDirectory = Environment.CurrentDirectory + "\\" + "Data\\";
         public const string UsersFile = "Users.txt";
         public const string AwardsFile = "Awards.txt";
         public const string LinksFile = "Links.txt";
 
-        public bool DeleteAwardById(Guid id) => DeleteObjectById<Award>(id, AwardsFile); // TODO delete from Links
+        public bool DeleteAwardById(Guid id) => DeleteObjectById<Award>(id, AwardsFile);
 
         public bool DeleteLinkById(Guid id) => DeleteObjectById<Link>(id, LinksFile);
 
-        public bool DeleteUserById(Guid id) => DeleteObjectById<User>(id, UsersFile); // TODO delete from Links
+        public bool DeleteUserById(Guid id) => DeleteObjectById<User>(id, UsersFile);
 
         public IEnumerable<Award> GetAllAwards() => GetAllObjects<Award>(AwardsFile);
 
@@ -30,11 +30,11 @@ namespace UserAwards.DAL.File
 
         public IEnumerable<User> GetAllUsers() => GetAllObjects<User>(UsersFile);
 
-        public bool AddAward(Award award) => AddObject(award, AwardsFile);
+        public bool InsertAward(Award award) => AddObject(award, AwardsFile);
 
-        public bool AddLink(Link link) => AddObject(link, LinksFile);
+        public bool InsertLink(Link link) => AddObject(link, LinksFile);
 
-        public bool AddUser(User user) => AddObject(user, UsersFile);
+        public bool InsertUser(User user) => AddObject(user, UsersFile);
 
         public bool UpdateUser(User user) => UpdateObject(user, UsersFile);
 

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные со сборкой.
-[assembly: AssemblyTitle("UserAwards.Common")]
+[assembly: AssemblyTitle("UserAwards.PL.Interfaces")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("UserAwards.Common")]
+[assembly: AssemblyProduct("UserAwards.PL.Interfaces")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("f6c20610-1453-4d81-897a-4d0c333d6037")]
+[assembly: Guid("89aa288a-ebb3-4161-9bea-7b3705d0ccb8")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

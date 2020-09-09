@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UserAwards.Entities;
 
-namespace UserAwards.Common
+namespace UserAwards.DAL.Interfaces
 {
     public interface IUserAwardsDAL
     {
-        bool AddUser(User user);
-        bool AddAward(Award award);
-        bool AddLink(Link link);
+        bool InsertUser(User user);
+        bool InsertAward(Award award);
+        bool InsertLink(Link link);
         User GetUserById(Guid id);
         Award GetAwardById(Guid id);
         Link GetLinkById(Guid id);
