@@ -8,7 +8,7 @@ namespace UserAwards.Entities
 {
     public class Award : IHasId
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public string Title { get; private set; }
 
         private Award()
@@ -16,7 +16,7 @@ namespace UserAwards.Entities
             Id = Guid.NewGuid();
         }
 
-        public Award(string title) : base()
+        public Award(string title) : this()
         {
             Title = title;
         }

@@ -45,9 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UserAwards.DAL.File\UserAwards.DAL.File.csproj">
+    <ProjectReference Include="..\UserAwards.DAL.Files\UserAwards.DAL.Files.csproj">
       <Project>{ACCF1B5A-14D6-4036-99D9-6DDDC9F4E9BE}</Project>
-      <Name>UserAwards.DAL.File</Name>
+      <Name>UserAwards.DAL.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\UserAwards.DAL.Interfaces\UserAwards.DAL.Interfaces.csproj">
       <Project>{7D685440-AD3B-4AB6-810F-A53D9CEA18C9}</Project>

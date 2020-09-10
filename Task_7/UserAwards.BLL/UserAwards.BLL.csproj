@@ -49,6 +49,14 @@
       <Project>{2A05D65C-7D90-4275-A65B-1305851A9B9D}</Project>
       <Name>UserAwards.BLL.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UserAwards.DAL.DR\UserAwards.DAL.DR.csproj">
+      <Project>{E9EECADA-FED7-4AFC-B80D-02358BF572F0}</Project>
+      <Name>UserAwards.DAL.DR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserAwards.DAL.Interfaces\UserAwards.DAL.Interfaces.csproj">
+      <Project>{7D685440-AD3B-4AB6-810F-A53D9CEA18C9}</Project>
+      <Name>UserAwards.DAL.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UserAwards.Entities\UserAwards.Entities.csproj">
       <Project>{c3884d1b-431f-4023-a6f6-9fdbfcc688ff}</Project>
       <Name>UserAwards.Entities</Name>

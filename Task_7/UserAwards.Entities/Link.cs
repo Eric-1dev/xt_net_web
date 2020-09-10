@@ -8,14 +8,14 @@ namespace UserAwards.Entities
 {
     public class Link : IHasId
     {
-        public Guid Id { get; private set; }
-        public int UserId { get; private set; }
-        public int AwardId { get; private set; }
+        public Guid Id { get; set; }
+        public Guid UserId { get; private set; }
+        public Guid AwardId { get; private set; }
         private Link()
         {
             Id = Guid.NewGuid();
         }
-        public Link(int userId, int awardId) : base()
+        public Link(Guid userId, Guid awardId) : this()
         {
             UserId = userId;
             AwardId = awardId;

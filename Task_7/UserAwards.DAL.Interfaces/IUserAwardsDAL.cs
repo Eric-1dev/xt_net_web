@@ -9,9 +9,9 @@ namespace UserAwards.DAL.Interfaces
 {
     public interface IUserAwardsDAL
     {
-        bool InsertUser(User user);
-        bool InsertAward(Award award);
-        bool InsertLink(Link link);
+        void InsertUser(User user);
+        void InsertAward(Award award);
+        void InsertLink(Link link);
         User GetUserById(Guid id);
         Award GetAwardById(Guid id);
         Link GetLinkById(Guid id);
@@ -21,6 +21,7 @@ namespace UserAwards.DAL.Interfaces
         bool DeleteUserById(Guid id);
         bool DeleteAwardById(Guid id);
         bool DeleteLinkById(Guid id);
+        bool DeleteLinkById(IEnumerable<Guid> ids);
         IEnumerable<User> GetAllUsers();
         IEnumerable<Award> GetAllAwards();
         IEnumerable<Link> GetAllLinks();

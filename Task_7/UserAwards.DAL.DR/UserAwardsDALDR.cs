@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UserAwards.DAL.File;
+using UserAwards.DAL.Files;
 using UserAwards.DAL.Interfaces;
 
 namespace UserAwards.DAL.DR

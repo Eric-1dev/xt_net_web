@@ -8,7 +8,7 @@ namespace UserAwards.Entities
 {
     public class User : IHasId
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public string Name { get; private set; }
         public DateTime DateOfBirth { get; private set; }
         public int Age { get; private set; }
@@ -18,7 +18,7 @@ namespace UserAwards.Entities
             Id = Guid.NewGuid();
         }
 
-        public User(string name, DateTime dateOfBirth, int age) : base()
+        public User(string name, DateTime dateOfBirth, int age) : this()
         {
             Name = name;
             DateOfBirth = dateOfBirth;

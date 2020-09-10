@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UserAwards.DAL.Interfaces;
 using UserAwards.Entities;
 
-namespace UserAwards.DAL.File
+namespace UserAwards.DAL.Files
 {
     public class FileUserAwardsDAL : IUserAwardsDAL
     {
@@ -18,9 +18,18 @@ namespace UserAwards.DAL.File
         public const string AwardsFile = "Awards.txt";
         public const string LinksFile = "Links.txt";
 
+        public FileUserAwardsDAL()
+        {
+            if (!Directory.Exists(WorkDirectory)) Directory.CreateDirectory(WorkDirectory);
+            if (!File.Exists(WorkDirectory + UsersFile)) File.Create(WorkDirectory + UsersFile).Close();
+            if (!File.Exists(WorkDirectory + AwardsFile)) File.Create(WorkDirectory + AwardsFile).Close();
+            if (!File.Exists(WorkDirectory + LinksFile)) File.Create(WorkDirectory + LinksFile).Close();
+
+        }
         public bool DeleteAwardById(Guid id) => DeleteObjectById<Award>(id, AwardsFile);
 
         public bool DeleteLinkById(Guid id) => DeleteObjectById<Link>(id, LinksFile);
+        public bool DeleteLinkById(IEnumerable<Guid> ids) => DeleteObjectById<Link>(ids, LinksFile);
 
         public bool DeleteUserById(Guid id) => DeleteObjectById<User>(id, UsersFile);
 
@@ -30,11 +39,11 @@ namespace UserAwards.DAL.File
 
         public IEnumerable<User> GetAllUsers() => GetAllObjects<User>(UsersFile);
 
-        public bool InsertAward(Award award) => AddObject(award, AwardsFile);
+        public void InsertAward(Award award) => AddObject(award, AwardsFile);
 
-        public bool InsertLink(Link link) => AddObject(link, LinksFile);
+        public void InsertLink(Link link) => AddObject(link, LinksFile);
 
-        public bool InsertUser(User user) => AddObject(user, UsersFile);
+        public void InsertUser(User user) => AddObject(user, UsersFile);
 
         public bool UpdateUser(User user) => UpdateObject(user, UsersFile);
 
@@ -71,28 +80,41 @@ namespace UserAwards.DAL.File
                     writer.WriteLine(JsonConvert.SerializeObject(elem));
         }
 
-        private bool AddObject<T>(T obj, string file) where T : IHasId
+        private void AddObject<T>(T obj, string file) where T : IHasId
         {
             var objects = new LinkedList<T>(GetAllObjects<T>(file));
 
-            foreach (var elem in objects)
-                if (elem.Id == obj.Id)
-                    return false;   // Если id'шники пересекаются - значит нарушается уникальность и добавлять нельзя
-
             objects.AddLast(obj);
             SaveAllObjects(objects, file);
-            return true;
         }
 
         private bool DeleteObjectById<T>(Guid id, string file) where T : IHasId
         {
-            var objects = new LinkedList<T>(GetAllObjects<T>(file));
+            /*var objects = new LinkedList<T>(GetAllObjects<T>(file));
             var objToDelete = objects.Where(obj => obj.Id == id);
             
             if (objToDelete.Count() == 0)
                 return false;
 
             objects.Remove(objToDelete.FirstOrDefault());
+
+            SaveAllObjects(objects, file);
+
+            return true;*/
+            var list = new List<Guid>(1);
+            list.Add(id);
+            return DeleteObjectById<T>(list, file);
+        }
+
+        private bool DeleteObjectById<T>(IEnumerable<Guid> ids, string file) where T : IHasId
+        {
+            var objects = GetAllObjects<T>(file);
+            var objToDelete = objects.Where(obj => ids.Contains(obj.Id));
+
+            if (objToDelete.Count() == 0)
+                return false;
+
+            objects = objects.Except(objToDelete);
 
             SaveAllObjects(objects, file);
 

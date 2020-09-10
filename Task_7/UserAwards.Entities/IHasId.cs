@@ -8,6 +8,6 @@ namespace UserAwards.Entities
 {
     public interface IHasId
     {
-        Guid Id { get; }
+        Guid Id { get; set; }
     }
 }
