@@ -13,7 +13,8 @@ namespace UserAwards.DAL.Files
 {
     public class FileUserAwardsDAL : IUserAwardsDAL
     {
-        public static string WorkDirectory = Environment.CurrentDirectory + "\\" + "Data\\";
+        //public static string WorkDirectory = Environment.CurrentDirectory + "\\" + "Data\\";
+        public static string WorkDirectory = "D:\\" + "Data\\";
         public const string UsersFile = "Users.txt";
         public const string AwardsFile = "Awards.txt";
         public const string LinksFile = "Links.txt";

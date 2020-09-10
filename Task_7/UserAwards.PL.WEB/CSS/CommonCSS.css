@@ -1,0 +1,35 @@
+﻿body {
+}
+
+.userList {
+    display: inline-flex;
+    overflow-x: auto;
+}
+
+.user {
+    margin: 5px;
+    padding: 5px;
+    flex-shrink: 0;
+    width: 120px;
+    height: 140px;
+    border-color: #808080;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    display: grid;
+}
+
+.userName {
+    min-height: 1.5em;
+    max-height: 3em;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.deleteUser {
+    width: 100%;
+    text-align: right;
+    
+}

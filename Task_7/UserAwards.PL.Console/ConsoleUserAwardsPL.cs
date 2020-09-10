@@ -12,7 +12,7 @@ namespace UserAwards.PL.Console
 {
     class ConsoleUserAwardsPL : IUserAwardsPL
     {
-        private IUserAwardsBLL BLL = UserAwardsBLLDR.UserAwardsBLL;
+        private readonly IUserAwardsBLL BLL = UserAwardsBLLDR.UserAwardsBLL;
         public void AddAward(Award award) => BLL.AddAward(award);
 
         public void AddAwardToUser(Guid userId, Guid awardId) => BLL.AddAwardToUser(userId, awardId);

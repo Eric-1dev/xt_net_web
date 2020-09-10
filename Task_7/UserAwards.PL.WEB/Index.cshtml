@@ -1,9 +1,28 @@
-﻿<!DOCTYPE html>
+﻿@using UserAwards.PL.WEB.Modules
+@{ 
+    var WebPL = new WebUserAwardsPL();
+    var users = WebPL.GetAllUsers();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Users &amp; Awards</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/CSS/CommonCSS.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="col-12 userList">
+        @foreach (var user in users)
+        {
+            <text><div class="user">
+                <div class="deleteUser"><button class="btn-sm btn-danger">×</button></div>
+                <div class="userName btn-info">@user.Name</div>
+            </div></text>
+        }
+    </div>
+    <div class="col-12">
 
+    </div>
 </body>
 </html>
