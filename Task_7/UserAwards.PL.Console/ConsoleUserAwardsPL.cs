@@ -71,5 +71,9 @@ namespace UserAwards.PL.Console
         public void ChangeUserById(Guid id, User user) => BLL.UpdateUserById(id, user);
 
         public void ChangeAwardById(Guid id, Award award) => BLL.UpdateAwardById(id, award);
+
+        public User GetUserById(Guid id) => BLL.GetUserById(id);
+
+        public Award GetAwardByID(Guid id) => BLL.GetAwardById(id);
     }
 }

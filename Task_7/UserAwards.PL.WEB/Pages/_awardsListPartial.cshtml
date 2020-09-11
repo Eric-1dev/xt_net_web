@@ -1,0 +1,22 @@
+﻿@using UserAwards.PL.WEB.Modules
+@{
+    var WebPL = new WebUserAwardsPL();
+    var awards = WebPL.GetAllAwards();
+
+    string image;
+}
+
+
+@foreach (var award in awards)
+{
+    <text>
+        <div class="item border-primary" id="@award.Id">
+            <div class="deleteItem"><button class="btn-sm btn-danger">&times;</button></div>
+            @if (award.Image == "") { image = "no_award_image.png"; }
+            else { image = award.Image; }
+            <div class="itemImage"><img class="avatar" src="~/Images/Avards/@image" /></div>
+
+            <div class="itemName alert-primary">@award.Title</div>
+        </div>
+    </text>
+}

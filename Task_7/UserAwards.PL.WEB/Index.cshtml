@@ -1,28 +1,48 @@
 ﻿@using UserAwards.PL.WEB.Modules
-@{ 
-    var WebPL = new WebUserAwardsPL();
-    var users = WebPL.GetAllUsers();
+@{
+    Layout = "~/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Users &amp; Awards</title>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/CSS/CommonCSS.css" rel="stylesheet" />
-</head>
-<body>
-    <div class="col-12 userList">
-        @foreach (var user in users)
-        {
-            <text><div class="user">
-                <div class="deleteUser"><button class="btn-sm btn-danger">×</button></div>
-                <div class="userName btn-info">@user.Name</div>
-            </div></text>
-        }
+<div class="row">
+    <div class="col"></div>
+    <div class="col-8 text-center mainGroups">
+        <h1>Пользователи</h1>
+        <div class="col-12" id="usersList">
+            @RenderPage("~/Pages/_usersListPartial.cshtml")
+            @RenderPage("~/Pages/_addItemPartial.cshtml")
+        </div>
     </div>
-    <div class="col-12">
+    <div class="col"></div>
+</div>
 
+<div class="row">
+    <div class="col"></div>
+    <div class="col-8 text-center mainGroups">
+        <h1>Награды</h1>
+        <div class="col-12" id="awardsList">
+            @RenderPage("~/Pages/_awardsListPartial.cshtml")
+            @RenderPage("~/Pages/_addItemPartial.cshtml")
+        </div>
     </div>
-</body>
-</html>
+    <div class="col"></div>
+</div>
+
+<div class="modal fade" id="itemEditModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <input type="date" id="birthDate">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

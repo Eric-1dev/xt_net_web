@@ -10,6 +10,7 @@ namespace UserAwards.Entities
     {
         public Guid Id { get; set; }
         public string Title { get; private set; }
+        public string Image { get; set; }
 
         private Award()
         {
@@ -19,6 +20,7 @@ namespace UserAwards.Entities
         public Award(string title) : this()
         {
             Title = title;
+            Image = "";
         }
     }
 }

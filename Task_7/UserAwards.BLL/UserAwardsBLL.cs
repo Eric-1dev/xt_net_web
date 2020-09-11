@@ -44,6 +44,8 @@ namespace UserAwards.BLL
 
         public IEnumerable<User> GetAllUsers() => DAL.GetAllUsers();
 
+        public Award GetAwardById(Guid id) => DAL.GetAwardById(id);
+
         public IEnumerable<Award> GetAwardsByUser(Guid userId)
         {
             var awardsId = DAL.GetAllLinks().Where(link => link.UserId == userId).Select(link => link.AwardId);
@@ -51,6 +53,8 @@ namespace UserAwards.BLL
 
             return awards.Where(user => awardsId.Contains(user.Id));
         }
+
+        public User GetUserById(Guid id) => DAL.GetUserById(id);
 
         public IEnumerable<User> GetUsersByAward(Guid awardId)
         {

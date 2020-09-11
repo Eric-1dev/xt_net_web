@@ -12,6 +12,7 @@ namespace UserAwards.Entities
         public string Name { get; private set; }
         public DateTime DateOfBirth { get; private set; }
         public int Age { get; private set; }
+        public string Image { get; set; }
 
         private User()
         {
@@ -23,6 +24,7 @@ namespace UserAwards.Entities
             Name = name;
             DateOfBirth = dateOfBirth;
             Age = age;
+            Image = "";
         }
     }
 }

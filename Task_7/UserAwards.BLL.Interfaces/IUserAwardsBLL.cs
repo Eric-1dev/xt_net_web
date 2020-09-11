@@ -12,9 +12,11 @@ namespace UserAwards.BLL.Interfaces
         void AddUser(User user);
         void RemoveUserById(Guid id);
         bool UpdateUserById(Guid id, User user);
+        User GetUserById(Guid id);
         void AddAward(Award award);
         void RemoveAwardById(Guid id);
         bool UpdateAwardById(Guid id, Award award);
+        Award GetAwardById(Guid id);
         bool AddAwardToUser(Guid userId, Guid awardId);
         void RemoveAwardFromUser(Guid userId, Guid awardId);
         IEnumerable<User> GetAllUsers();
