@@ -1,0 +1,57 @@
+﻿<div class="modal fade" id="itemEditModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <input type="hidden" id="modal_itemType">
+                <input type="hidden" id="modal_itemId">
+                <input type="file" id="modal_file" class="modal_file" accept="image/png, image/jpeg" hidden />
+                <div id="modal_user_sect">
+                    <div class="row">
+                        <div class="col">
+                            <div class="modal_div_image"><img id="modal_user_image" src="~/Images/Avatars/no_avatar.png" /></div>
+                            <div><label for="modal_file" class="change_img btn btn-info">Сменить аватар</label></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group mb-3 modal_div_name">
+                                <div class="text-dark">Имя пользователя</div><br>
+                                <input type="text" id="modal_user_name">
+                            </div>
+                            <div id="modal_div_birthday">
+                                <div class="text-dark">Дата рождения</div>
+                                <input type="date" id="modal_birthday">
+                            </div>
+                            <div id="modal_div_age">
+                                <div class="text-dark">Возраст</div>
+                                <input type="number" id="modal_age" min="0" max="150">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="modal_award_sect">
+                    <div class="row">
+                        <div class="col">
+                            <div class="modal_div_image"><img id="modal_award_image" src="~/Images/Avards/no_award_image.png" /></div>
+                            <div><label for="modal_file" class="change_img btn btn-info">Сменить иконку</label></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group mb-3 modal_div_name">
+                                <div class="text-dark">Название награды</div>
+                                <input type="text" id="modal_award_title">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="modal_save">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>

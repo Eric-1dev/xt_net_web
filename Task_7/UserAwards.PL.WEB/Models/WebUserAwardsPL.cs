@@ -26,7 +26,7 @@ namespace UserAwards.PL.WEB.Modules
 
         public IEnumerable<User> GetAllUsers() => BLL.GetAllUsers();
 
-        public Award GetAwardByID(Guid id) => BLL.GetAwardById(id);
+        public Award GetAwardById(Guid id) => BLL.GetAwardById(id);
 
         public IEnumerable<Award> GetAwardsByUser(Guid userId) => BLL.GetAwardsByUser(userId);
 

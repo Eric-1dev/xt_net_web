@@ -1,0 +1,15 @@
+﻿@using UserAwards.PL.WEB.Modules
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Converters
+@{
+    Layout = null;
+
+    var WebPL = new WebUserAwardsPL();
+    Guid guid;
+    Guid.TryParse(Request["id"], out guid);
+    var award = WebPL.GetAwardById(guid);
+
+    var json = JsonConvert.SerializeObject(award);
+
+    Response.Write(json);
+}

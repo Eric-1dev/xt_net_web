@@ -52,3 +52,19 @@
 .avatar {
     width: 100%;
 }
+
+.modal_div_image {
+    width: 140px;
+    max-height: 160px;
+    border-color: #bebebe;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 3px;
+    user-select: none;
+    overflow: hidden;
+}
+
+.modal_div_image > img{
+    width: 100%;
+}
+

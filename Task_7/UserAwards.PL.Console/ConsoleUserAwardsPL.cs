@@ -74,6 +74,6 @@ namespace UserAwards.PL.Console
 
         public User GetUserById(Guid id) => BLL.GetUserById(id);
 
-        public Award GetAwardByID(Guid id) => BLL.GetAwardById(id);
+        public Award GetAwardById(Guid id) => BLL.GetAwardById(id);
     }
 }

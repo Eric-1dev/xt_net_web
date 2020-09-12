@@ -16,7 +16,7 @@ namespace UserAwards.PL.Interfaces
         void AddAward(Award award);
         void RemoveAwardById(Guid id);
         void ChangeAwardById(Guid id, Award award);
-        Award GetAwardByID(Guid id);
+        Award GetAwardById(Guid id);
         void AddAwardToUser(Guid userId, Guid awardId);
         void RemoveAwardFromUser(Guid userId, Guid awardId);
         IEnumerable<User> GetAllUsers();
