@@ -17,10 +17,10 @@ namespace UserAwards.Entities
             Id = Guid.NewGuid();
         }
 
-        public Award(string title) : this()
+        public Award(string title, string image) : this()
         {
             Title = title;
-            Image = "";
+            Image = image;
         }
     }
 }

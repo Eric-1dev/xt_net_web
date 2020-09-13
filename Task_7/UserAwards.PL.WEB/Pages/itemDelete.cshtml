@@ -1,0 +1,14 @@
+﻿@using UserAwards.PL.WEB.Modules
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    var type = Request["Type"];
+
+    Guid id;
+    Guid.TryParse(Request["Id"], out id);
+
+    if (type == "user")
+    { WebPL.RemoveUserById(id); }
+    else
+    { WebPL.RemoveAwardById(id); }
+}

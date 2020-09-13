@@ -1,0 +1,26 @@
+﻿@using UserAwards.PL.WEB.Modules
+@{
+    var WebPL = new WebUserAwardsPL();
+    var users = WebPL.GetAllUsers();
+
+    string image;
+}
+
+@foreach (var user in users)
+{
+    if (user.Image == null)
+    {
+        image = "/Images/no_avatar.png";
+    }
+    else
+    {
+        image = user.Image;
+    }
+    <text>
+        <div class="item border-primary" id="@user.Id">
+            <div class="deleteItem"><button class="btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete">&times;</button></div>
+            <div class="itemImage"><img class="avatar" src="@image" /></div>
+            <div class="itemName alert-primary">@user.Name</div>
+        </div>
+    </text>
+}

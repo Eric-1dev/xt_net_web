@@ -1,0 +1,80 @@
+﻿@using UserAwards.PL.WEB.Modules
+@using UserAwards.Entities
+@using System.Text.RegularExpressions
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    string type = Request["Type"];
+
+    Guid id;
+    Guid.TryParse(Request["Id"], out id);
+
+    string name = Request["Name"];
+
+    string image = Request["Image"];
+
+    if (type == "user")
+    {
+        string nameCheck = @"[a-zA-Z0-9_\-]{3,}";
+
+        var dateArr = Request["DateOfBirth"].Split('-');
+        if (dateArr.Length != 3)
+        {
+            Response.Write("Incorect date of birth");
+            return;
+        }
+        int year, mount, day;
+        int.TryParse(dateArr[0], out year);
+        int.TryParse(dateArr[1], out mount);
+        int.TryParse(dateArr[2], out day);
+
+        var birthDay = new DateTime(year, mount, day);
+        int age;
+        int.TryParse(Request["Age"].ToString(), out age);
+
+
+        // Проверки на корректность
+        if (!Regex.IsMatch(name, nameCheck) ||
+            age > 150 || age < 0)
+        {
+            Response.Write("Incorect input");
+        }
+        else
+        {
+            var users = WebPL.GetAllUsers();
+            if (users.Where(usr => usr.Name == name && usr.Id != id).Any())
+            {
+                Response.Write("Username must be unique");
+                return;
+            }
+            var user = new User(name, birthDay, age, image);
+            if (id != Guid.Empty)
+            { WebPL.ChangeUserById(id, user); }
+            else
+            { WebPL.AddUser(user); }
+        }
+    }
+    else
+    {
+        string nameCheck = @"[a-zA-Z0-9_\-\s]{3,}";
+
+        if (!Regex.IsMatch(name, nameCheck))
+        {
+            Response.Write("Incorect input");
+        }
+        else
+        {
+            var awards = WebPL.GetAllAwards();
+            if (awards.Where(awrd => awrd.Title == name && awrd.Id != id).Any())
+            {
+                Response.Write("Username must be unique");
+                return;
+            }
+            var award = new Award(name, image);
+            if (id != Guid.Empty)
+            { WebPL.ChangeAwardById(id, award); }
+            else
+            { WebPL.AddAward(award); }
+        }
+    }
+}

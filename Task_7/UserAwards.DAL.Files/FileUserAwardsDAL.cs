@@ -61,24 +61,21 @@ namespace UserAwards.DAL.Files
         private IEnumerable<T> GetAllObjects<T>(string file)
         {
             var objects = new LinkedList<T>();
-            string line;
+            string[] text = File.ReadAllLines(WorkDirectory + file);
 
-            using (var reader = new StreamReader(WorkDirectory + file))
-            {
-                while ((line = reader.ReadLine()) != null)
-                {
-                    objects.AddLast(JsonConvert.DeserializeObject<T>(line));
-                }
-            }
+            foreach (var line in text)
+                objects.AddLast(JsonConvert.DeserializeObject<T>(line));
 
             return objects;
         }
 
         private void SaveAllObjects<T>(IEnumerable<T> objects, string file)
         {
-            using (var writer = new StreamWriter(WorkDirectory + file))
-                foreach (var elem in objects)
-                    writer.WriteLine(JsonConvert.SerializeObject(elem));
+            var text = new LinkedList<string>();
+            foreach (var elem in objects)
+                text.AddLast(JsonConvert.SerializeObject(elem));
+            File.WriteAllLines(WorkDirectory + file, text.ToArray());
+
         }
 
         private void AddObject<T>(T obj, string file) where T : IHasId
@@ -102,8 +99,10 @@ namespace UserAwards.DAL.Files
             SaveAllObjects(objects, file);
 
             return true;*/
-            var list = new List<Guid>(1);
-            list.Add(id);
+            var list = new List<Guid>(1)
+            {
+                id
+            };
             return DeleteObjectById<T>(list, file);
         }
 

@@ -8,8 +8,12 @@
     <div class="col-8 text-center mainGroups">
         <h1>Пользователи</h1>
         <div class="col-12" id="usersList">
-            @RenderPage("~/Pages/_usersListPartial.cshtml")
-            @RenderPage("~/Pages/_addButtonPartial.cshtml")
+            <div id="users">
+                @RenderPage("~/Pages/usersListPartial.cshtml")
+            </div>
+            <div>
+                @RenderPage("~/Pages/_addButtonPartial.cshtml")
+            </div>
         </div>
     </div>
     <div class="col"></div>
@@ -20,11 +24,17 @@
     <div class="col-8 text-center mainGroups">
         <h1>Награды</h1>
         <div class="col-12" id="awardsList">
-            @RenderPage("~/Pages/_awardsListPartial.cshtml")
-            @RenderPage("~/Pages/_addButtonPartial.cshtml")
+            <div id="awards">
+                @RenderPage("~/Pages/awardsListPartial.cshtml")
+            </div>
+            <div>
+                @RenderPage("~/Pages/_addButtonPartial.cshtml")
+            </div>
         </div>
     </div>
     <div class="col"></div>
 </div>
 
 @RenderPage("~/Pages/_modalItemAddPartial.cshtml")
+@RenderPage("~/Pages/_modalConfirm.cshtml")
+@RenderPage("~/Pages/_toast.cshtml")

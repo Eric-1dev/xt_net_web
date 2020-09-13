@@ -1,10 +1,18 @@
-﻿body {
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f8f8;
+}
+
+.row {
+    margin: 0 15px;
 }
 
 .itemList {
     display: inline-flex;
     overflow-x: auto;
-    
 }
 
 .mainGroups {
@@ -17,20 +25,26 @@
 }
 
 .item {
+    background-color: #ffffff;
     float: left;
     margin: 5px;
     padding: 0px;
     overflow: hidden;
     flex-shrink: 0;
-    width: 120px;
-    height: 180px;
+    width: 140px;
+    height: 220px;
     border-radius: 10px;
     border-style: solid;
     border-width: 1px;
     display: grid;
-    grid-template-rows: 30px auto 30px;
+    grid-template-rows: 30px 160px 30px;
     cursor: pointer;
 }
+
+    .item:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease-in-out;
+    }
 
 .deleteItem {
     width: 100%;
@@ -39,8 +53,9 @@
 }
 
 .itemImage {
+    display: flex;
     padding: 5px;
-    margin: auto;
+    height: 100%;
 }
 
 .itemName {
@@ -50,21 +65,24 @@
 }
 
 .avatar {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
 }
 
 .modal_div_image {
+    display: flex;
     width: 140px;
-    max-height: 160px;
+    height: 160px;
     border-color: #bebebe;
     border-radius: 3px;
     border-style: solid;
     padding: 3px;
     user-select: none;
-    overflow: hidden;
 }
 
-.modal_div_image > img{
-    width: 100%;
-}
-
+    .modal_div_image > img {
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+    }
