@@ -1,10 +1,14 @@
-﻿$(document).ready(onReady);
+﻿const no_award_image = "/Images/no_award_image.png";
+const no_avatar = "/Images/no_avatar.png";
+
+$(document).ready(onReady);
 
 function onReady() {
     $('.item').click(ItemEdit);
     $('.deleteItem').click(DeleteItem);
     $('#modal_file').change(UploadImage);
     $('#modal_save').click(ItemSave);
+    $('.modal_list_plus').click(AddLink);
 }
 
 function ItemEdit() {
@@ -15,7 +19,7 @@ function ItemEdit() {
         $('#modal_itemType').val("user");
         $('#modal_award_sect').hide();
         $('#modal_user_sect').show();
-        $('#modal_user_image').attr('src', '/Images/no_avatar.png');
+        $('#modal_user_image').attr('src', no_avatar);
 
         $('#modal_title').html("Пользователь");
 
@@ -34,12 +38,18 @@ function ItemEdit() {
                     $('#modal_user_image').attr('src', data['Image']);
             });
         }
+
+        $.post("/Pages/avardsListModal.cshtml", // Получаем ачивки юзера
+            { Id: id },
+            function (data) {
+                $('#modal_user_awards').prepend(data);
+            });
     }
     else { // если ткнули на ачивку
         $('#modal_itemType').val("award");
         $('#modal_user_sect').hide();
         $('#modal_award_sect').show();
-        $('#modal_award_image').attr('src', '/Images/no_award_image.png');
+        $('#modal_award_image').attr('src', no_award_image);
 
         $('#modal_title').html("Награда");
 
@@ -154,6 +164,8 @@ function ItemSave() {
         let birthday = $('#modal_birthday').val();
         let age = $('#modal_age').val();
         image = $('#modal_user_image').attr('src');
+        if (image == no_avatar)
+            image = null;
         name = $('#modal_user_name').val();
 
         data.DateOfBirth = birthday;
@@ -162,6 +174,8 @@ function ItemSave() {
     }
     else {
         image = $('#modal_award_image').attr('src');
+        if (image == no_award_image)
+            image = null;
         name = $('#modal_award_title').val();
     }
 
@@ -206,4 +220,8 @@ function UpdateItemsList(type) {
                 $('.deleteItem').click(DeleteItem);
             });
     }
+}
+
+function AddLink() {
+    
 }

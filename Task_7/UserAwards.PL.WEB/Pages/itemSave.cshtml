@@ -12,6 +12,10 @@
     string name = Request["Name"];
 
     string image = Request["Image"];
+    if (image.Length == 0)
+    {
+        image = null;
+    }
 
     if (type == "user")
     {
@@ -67,7 +71,7 @@
             var awards = WebPL.GetAllAwards();
             if (awards.Where(awrd => awrd.Title == name && awrd.Id != id).Any())
             {
-                Response.Write("Username must be unique");
+                Response.Write("Award name must be unique");
                 return;
             }
             var award = new Award(name, image);

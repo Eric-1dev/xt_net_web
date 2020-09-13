@@ -17,7 +17,7 @@ namespace UserAwards.Entities
             Id = Guid.NewGuid();
         }
 
-        public Award(string title, string image) : this()
+        public Award(string title, string image = null) : this()
         {
             Title = title;
             Image = image;

@@ -28,11 +28,11 @@ namespace UserAwards.PL.WEB.Modules
 
         public Award GetAwardById(Guid id) => BLL.GetAwardById(id);
 
-        public IEnumerable<Award> GetAwardsByUser(Guid userId) => BLL.GetAwardsByUser(userId);
+        public IEnumerable<Award> GetAwardsByUserId(Guid userId) => BLL.GetAwardsByUser(userId);
 
         public User GetUserById(Guid id) => BLL.GetUserById(id);
 
-        public IEnumerable<User> GetUsersByAward(Guid awardId) => BLL.GetUsersByAward(awardId);
+        public IEnumerable<User> GetUsersByAwardId(Guid awardId) => BLL.GetUsersByAward(awardId);
 
         public void RemoveAwardById(Guid id) => BLL.RemoveAwardById(id);
 

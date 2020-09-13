@@ -1,0 +1,33 @@
+﻿@using UserAwards.PL.WEB.Modules
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    Guid id;
+    Guid.TryParse(Request["Id"], out id);
+
+    if (id == Guid.Empty)
+    {
+        return;
+    }
+    var awards = WebPL.GetAwardsByUserId(id);
+
+    string image;
+}
+
+@foreach (var award in awards)
+{
+    if (award.Image == null)
+    {
+        image = "/Images/no_award_image.png";
+    }
+    else
+    {
+        image = award.Image;
+    }
+    <text>
+        <div class="modal_list_item" id="@award.Id">
+            <div class="modal_list_delete"><button class="btn-sm btn-danger">&times;</button></div>
+            <div class="modal_list_image" title="@award.Title"><img class="modal_list_avatar" src="@image" /></div>
+        </div>
+    </text>
+}

@@ -130,8 +130,11 @@
     <Content Include="Pages\getAwardInfo.cshtml" />
     <Content Include="Pages\itemSave.cshtml" />
     <Content Include="Pages\itemDelete.cshtml" />
+    <Content Include="Pages\avardsListModal.cshtml" />
+    <Content Include="Pages\usersListModal.cshtml" />
+    <Content Include="Pages\modalListItemsToAdd.cshtml" />
     <None Include="Pages\_addButtonPartial.cshtml" />
-    <Content Include="Pages\_modalItemAddPartial.cshtml" />
+    <Content Include="Pages\_modalItemEditPartial.cshtml" />
     <Content Include="Pages\_toast.cshtml" />
     <Content Include="Pages\_modalConfirm.cshtml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />

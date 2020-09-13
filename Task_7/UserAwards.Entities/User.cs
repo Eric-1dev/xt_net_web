@@ -19,7 +19,7 @@ namespace UserAwards.Entities
             Id = Guid.NewGuid();
         }
 
-        public User(string name, DateTime dateOfBirth, int age, string image) : this()
+        public User(string name, DateTime dateOfBirth, int age, string image = null) : this()
         {
             Name = name;
             DateOfBirth = dateOfBirth;

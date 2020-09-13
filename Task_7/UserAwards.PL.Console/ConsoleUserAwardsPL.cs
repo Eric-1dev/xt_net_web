@@ -29,9 +29,9 @@ namespace UserAwards.PL.Console
 
         public IEnumerable<User> GetAllUsers() => BLL.GetAllUsers();
 
-        public IEnumerable<User> GetUsersByAward(Guid awardId) => BLL.GetUsersByAward(awardId);
+        public IEnumerable<User> GetUsersByAwardId(Guid awardId) => BLL.GetUsersByAward(awardId);
 
-        public IEnumerable<Award> GetAwardsByUser(Guid userId) => BLL.GetAwardsByUser(userId);
+        public IEnumerable<Award> GetAwardsByUserId(Guid userId) => BLL.GetAwardsByUser(userId);
 
         public void ShowAllUsers()
         {
@@ -39,7 +39,7 @@ namespace UserAwards.PL.Console
             var users = GetAllUsers();
             foreach (var user in users)
             {
-                var awards = GetAwardsByUser(user.Id);
+                var awards = GetAwardsByUserId(user.Id);
 
                 System.Console.WriteLine($"Name: {user.Name} \t\t Age: {user.Age} \t Date of birth: {user.DateOfBirth}");
 
@@ -56,7 +56,7 @@ namespace UserAwards.PL.Console
             var awards = GetAllAwards();
             foreach (var award in awards)
             {
-                var users = GetUsersByAward(award.Id);
+                var users = GetUsersByAwardId(award.Id);
 
                 System.Console.WriteLine($"Name: {award.Title}");
 
