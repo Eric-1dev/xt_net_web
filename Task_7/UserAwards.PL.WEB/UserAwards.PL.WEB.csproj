@@ -135,6 +135,7 @@
     <Content Include="Pages\_modalListItemsToAdd.cshtml" />
     <Content Include="Pages\usrAwdListSmall.cshtml" />
     <Content Include="Pages\addLink.cshtml" />
+    <Content Include="Pages\deleteLink.cshtml" />
     <None Include="Pages\_addButtonPartial.cshtml" />
     <Content Include="Pages\_modalItemEditPartial.cshtml" />
     <Content Include="Pages\_toast.cshtml" />

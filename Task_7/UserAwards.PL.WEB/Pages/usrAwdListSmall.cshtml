@@ -15,17 +15,14 @@
     }
 
     dynamic items;
-    dynamic existingLinkedItems;
 
     if (type == "user")
     {
         items = WebPL.GetAllAwards();
-        existingLinkedItems = WebPL.GetAwardsByUserId(id);
     }
     else
     {
         items = WebPL.GetAllUsers();
-        existingLinkedItems = WebPL.GetUsersByAwardId(id);
     }
 
     string name;
@@ -38,12 +35,21 @@
     {
         image = "/Images/no_award_image.png";
         name = (item as Award).Title;
-        //if ((existingLinkedItems as IEnumerable<Award>).Contains(item))
+        var existingLinkedItems = WebPL.GetAwardsByUserId(id);
+        if (existingLinkedItems.Where(elem => elem.Id == item.Id).Any())
+        {
+            continue;
+        }
     }
     else
     {
         image = "/Images/no_avatar.png";
         name = (item as User).Name;
+        var existingLinkedItems = WebPL.GetUsersByAwardId(id);
+        if (existingLinkedItems.Where(elem => elem.Id == item.Id).Any())
+        {
+            continue;
+        }
     }
 
     if (item.Image != null)

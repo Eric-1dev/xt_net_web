@@ -47,7 +47,7 @@ function ItemEdit() {
     }
     else { // если ткнули на ачивку
         type = "award";
-        
+
         $('#modal_user_sect').hide();
         $('#modal_award_sect').show();
         $('#modal_award_image').attr('src', no_award_image);
@@ -68,14 +68,7 @@ function ItemEdit() {
 
     $('#modal_itemType').val(type);
 
-    $.post("/Pages/usrAwdListModal.cshtml", // Получаем ачивки юзера или владельцев наград
-        {
-            Id: id,
-            Type: type
-        },
-        function (data) {
-            $('#modal_user_awards').html(data);
-        });
+    GetUsrAwdListModal(id, type);
 
     $("#itemEditModal").modal('show');
 }
@@ -233,9 +226,8 @@ function UpdateItemsList(type) {
 }
 
 function AddLink() {
-    let type;
     let parentId = $('#modal_itemId').val();
-    type = $('#modal_itemType').val();
+    let type = $('#modal_itemType').val();
     $.post("/Pages/usrAwdListSmall.cshtml",
         {
             Type: type,
@@ -265,11 +257,47 @@ function AddLink() {
                         else {
                             ShowMessage("Успешно добавлено");
                             $('#modal_list_item_to_add').modal('hide');
-                            $("#itemEditModal").modal('hide');
+                            GetUsrAwdListModal(parentId, type);
                         }
                     }
                 )
             });
         });
     $('#modal_list_item_to_add').modal('show');
+}
+
+function DeleteLink() {
+    let parentId = $('#modal_itemId').val();
+    let type = $('#modal_itemType').val();
+    let pickedId = $(this).parent().attr('id');
+    let userId;
+    let awardId;
+    if (type == "user") {
+        userId = parentId;
+        awardId = pickedId;
+    }
+    else {
+        userId = pickedId;
+        awardId = parentId;
+    }
+    $.post("/Pages/deleteLink.cshtml",
+        {
+            UserId: userId,
+            AwardId: awardId
+        }, function (data) {
+            ShowMessage("Успешно удалено");
+            GetUsrAwdListModal(parentId, type);
+        });
+}
+
+function GetUsrAwdListModal(id, type) {
+    $.post("/Pages/usrAwdListModal.cshtml", // Получаем ачивки юзера или владельцев наград
+        {
+            Id: id,
+            Type: type
+        },
+        function (data) {
+            $('#modal_user_awards').html(data);
+            $('.modal_list_delete').click(DeleteLink);
+        });
 }
