@@ -130,9 +130,11 @@
     <Content Include="Pages\getAwardInfo.cshtml" />
     <Content Include="Pages\itemSave.cshtml" />
     <Content Include="Pages\itemDelete.cshtml" />
-    <Content Include="Pages\avardsListModal.cshtml" />
+    <Content Include="Pages\usrAwdListModal.cshtml" />
     <Content Include="Pages\usersListModal.cshtml" />
-    <Content Include="Pages\modalListItemsToAdd.cshtml" />
+    <Content Include="Pages\_modalListItemsToAdd.cshtml" />
+    <Content Include="Pages\usrAwdListSmall.cshtml" />
+    <Content Include="Pages\addLink.cshtml" />
     <None Include="Pages\_addButtonPartial.cshtml" />
     <Content Include="Pages\_modalItemEditPartial.cshtml" />
     <Content Include="Pages\_toast.cshtml" />

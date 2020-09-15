@@ -1,0 +1,60 @@
+﻿@using UserAwards.PL.WEB.Modules
+@using UserAwards.Entities
+@using System.Linq
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    var type = Request["Type"];
+
+    Guid id;
+    Guid.TryParse(Request["Id"], out id);
+    if (id == Guid.Empty)
+    {
+        Response.Write("Некорректные данные");
+        return;
+    }
+
+    dynamic items;
+    dynamic existingLinkedItems;
+
+    if (type == "user")
+    {
+        items = WebPL.GetAllAwards();
+        existingLinkedItems = WebPL.GetAwardsByUserId(id);
+    }
+    else
+    {
+        items = WebPL.GetAllUsers();
+        existingLinkedItems = WebPL.GetUsersByAwardId(id);
+    }
+
+    string name;
+    string image;
+}
+
+@foreach (var item in items)
+{
+    if (type == "user")
+    {
+        image = "/Images/no_award_image.png";
+        name = (item as Award).Title;
+        //if ((existingLinkedItems as IEnumerable<Award>).Contains(item))
+    }
+    else
+    {
+        image = "/Images/no_avatar.png";
+        name = (item as User).Name;
+    }
+
+    if (item.Image != null)
+    {
+        image = item.Image;
+    }
+
+    <text>
+        <div class="item-to-pick border-primary" id="@item.Id">
+            <div class="item-to-pick-image-wrapper"><img src="@image"></div>
+            <div class="alert-primary item-to-pick-text">@name</div>
+        </div>
+    </text>
+}

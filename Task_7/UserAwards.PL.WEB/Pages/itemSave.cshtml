@@ -41,14 +41,14 @@
         if (!Regex.IsMatch(name, nameCheck) ||
             age > 150 || age < 0)
         {
-            Response.Write("Incorect input");
+            Response.Write("Некорректное имя пользователя. Название должно быть длинее 2 символов.");
         }
         else
         {
             var users = WebPL.GetAllUsers();
             if (users.Where(usr => usr.Name == name && usr.Id != id).Any())
             {
-                Response.Write("Username must be unique");
+                Response.Write("Пользователь с таким именнем уже присутствует в базе.");
                 return;
             }
             var user = new User(name, birthDay, age, image);
@@ -60,18 +60,18 @@
     }
     else
     {
-        string nameCheck = @"[a-zA-Z0-9_\-\s]{3,}";
+        string nameCheck = @"[a-zA-Zа-яА-ЯёЁ0-9_\-\s]{3,}";
 
         if (!Regex.IsMatch(name, nameCheck))
         {
-            Response.Write("Incorect input");
+            Response.Write("Некорректное название. Название должно быть длинее 2 символов.");
         }
         else
         {
             var awards = WebPL.GetAllAwards();
             if (awards.Where(awrd => awrd.Title == name && awrd.Id != id).Any())
             {
-                Response.Write("Award name must be unique");
+                Response.Write("Название награды должно быть уникальным.");
                 return;
             }
             var award = new Award(name, image);

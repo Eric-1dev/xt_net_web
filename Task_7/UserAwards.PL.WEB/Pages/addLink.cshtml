@@ -1,0 +1,18 @@
+﻿@using UserAwards.PL.WEB.Modules
+@using UserAwards.Entities;
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    Guid userId, awardId;
+
+    Guid.TryParse(Request["UserId"], out userId);
+    Guid.TryParse(Request["AwardId"], out awardId);
+
+    if ( userId == Guid.Empty && awardId == Guid.Empty )
+    {
+        Response.Write("Что-то пошло не так");
+        return;
+    }
+
+    WebPL.AddAwardToUser(userId, awardId);
+}

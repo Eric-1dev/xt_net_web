@@ -11,12 +11,18 @@ function onReady() {
     $('.modal_list_plus').click(AddLink);
 }
 
+function ShowMessage(data) {
+    $('#toast_body').html(data);
+    $('.toast').toast('show');
+}
+
 function ItemEdit() {
     let id = this.id;
+    let type;
 
     $('#modal_itemId').val(id);
     if ($(this).parent().parent().attr('id') == "usersList") { // если ткнули на юзера
-        $('#modal_itemType').val("user");
+        type = "user";
         $('#modal_award_sect').hide();
         $('#modal_user_sect').show();
         $('#modal_user_image').attr('src', no_avatar);
@@ -38,15 +44,10 @@ function ItemEdit() {
                     $('#modal_user_image').attr('src', data['Image']);
             });
         }
-
-        $.post("/Pages/avardsListModal.cshtml", // Получаем ачивки юзера
-            { Id: id },
-            function (data) {
-                $('#modal_user_awards').prepend(data);
-            });
     }
     else { // если ткнули на ачивку
-        $('#modal_itemType').val("award");
+        type = "award";
+        
         $('#modal_user_sect').hide();
         $('#modal_award_sect').show();
         $('#modal_award_image').attr('src', no_award_image);
@@ -65,6 +66,17 @@ function ItemEdit() {
         }
     }
 
+    $('#modal_itemType').val(type);
+
+    $.post("/Pages/usrAwdListModal.cshtml", // Получаем ачивки юзера или владельцев наград
+        {
+            Id: id,
+            Type: type
+        },
+        function (data) {
+            $('#modal_user_awards').html(data);
+        });
+
     $("#itemEditModal").modal('show');
 }
 
@@ -82,7 +94,7 @@ function UploadImage() {
         let reader = new FileReader();
 
         reader.readAsDataURL(this.files[0]);
-        reader.onload = function (e) {
+        reader.onload = function (event) {
             let img = new Image(); // Масштабируем
 
             img.src = event.target.result;
@@ -137,11 +149,10 @@ function DeleteItem() {
             },
             function (data) {
                 if (data == "")
-                    $('#toast_body').html("Успешно удалено");
+                    ShowMessage("Успешно удалено");
                 else
-                    $('#toast_body').html(data);
+                    ShowMessage(data);
                 $('#confirm_delete').modal('hide');
-                $('.toast').toast('show');
                 if (type == 'user')
                     UpdateItemsList('user');
                 else
@@ -189,15 +200,14 @@ function ItemSave() {
         function (data) {
             if (data == "") {
                 $("#itemEditModal").modal('hide');
-                $('#toast_body').html("Успешно сохранено");
+                ShowMessage("Успешно сохранено");
                 if (type == 'user')
                     UpdateItemsList('user');
                 else
                     UpdateItemsList('award');
             }
             else
-                $('#toast_body').html(data);
-            $('.toast').toast('show');
+                ShowMessage(data);
         });
 }
 
@@ -223,5 +233,43 @@ function UpdateItemsList(type) {
 }
 
 function AddLink() {
-    
+    let type;
+    let parentId = $('#modal_itemId').val();
+    type = $('#modal_itemType').val();
+    $.post("/Pages/usrAwdListSmall.cshtml",
+        {
+            Type: type,
+            Id: parentId
+        },
+        function (data) {
+            $('#modal_list_item_to_add_body').html(data);
+            $('.item-to-pick').click(function () {
+                let userId;
+                let awardId;
+                let pickedId = $(this).attr('id');
+                if (type == "user") {
+                    userId = parentId;
+                    awardId = pickedId;
+                }
+                else {
+                    userId = pickedId;
+                    awardId = parentId;
+                }
+                $.post("/Pages/addLink.cshtml",
+                    {
+                        UserId: userId,
+                        AwardId: awardId
+                    }, function (data) {
+                        if (data != "")
+                            ShowMessage(data);
+                        else {
+                            ShowMessage("Успешно добавлено");
+                            $('#modal_list_item_to_add').modal('hide');
+                            $("#itemEditModal").modal('hide');
+                        }
+                    }
+                )
+            });
+        });
+    $('#modal_list_item_to_add').modal('show');
 }

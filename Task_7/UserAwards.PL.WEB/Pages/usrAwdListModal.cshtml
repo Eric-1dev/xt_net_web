@@ -1,0 +1,55 @@
+﻿@using UserAwards.PL.WEB.Modules
+@using UserAwards.Entities
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    var type = Request["Type"];
+
+    dynamic items;
+
+    Guid id;
+    Guid.TryParse(Request["Id"], out id);
+
+    if (id == Guid.Empty)
+    {
+        return;
+    }
+
+    if (type == "user")
+    {
+        items = WebPL.GetAwardsByUserId(id);
+    }
+    else
+    {
+        items = WebPL.GetUsersByAwardId(id);
+    }
+
+    string name;
+    string image;
+}
+
+@foreach (var item in items)
+{
+    if (type == "user")
+    {
+        image = "/Images/no_award_image.png";
+        name = (item as Award).Title;
+    }
+    else
+    {
+        image = "/Images/no_avatar.png";
+        name = (item as User).Name;
+    }
+
+    if (item.Image != null)
+    {
+        image = item.Image;
+    }
+
+    <text>
+        <div class="modal_list_item" id="@item.Id">
+            <div class="modal_list_image" title="@name"><img class="modal_list_avatar" src="@image" /></div>
+            <div class="modal_list_delete">&times;</div>
+        </div>
+    </text>
+}

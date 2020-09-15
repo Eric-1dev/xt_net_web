@@ -87,12 +87,16 @@ body {
         margin: auto;
     }
 
+.modal_user_award_section {
+    float: left;
+}
+
 .modal_user_award_list {
     float: left;
 }
 
     .modal_user_award_list > div {
-        display: flex;
+        background-color: #ffffff;
         width: 50px;
         height: 70px;
         border-color: #bebebe;
@@ -103,12 +107,80 @@ body {
         margin: 3px;
     }
 
-        .modal_user_award_list > div > img {
-            max-width: 100%;
-            max-height: 100%;
-            margin: auto;
-        }
+.modal_list_item {
+    position: relative;
+    float: left;
+}
+
+.modal_list_delete {
+    color: #a90000;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1em;
+    height: 20px;
+    margin-top: -0.5em;
+    padding: 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal_list_image {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.modal_list_image > img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
 
 .modal_list_plus {
     cursor: pointer;
+}
+
+#modal_list_item_to_add_body {
+    float: left;
+}
+
+.item-to-pick {
+    background-color: #ffffff;
+    float: left;
+    margin: 5px;
+    padding: 0px;
+    overflow: hidden;
+    flex-shrink: 0;
+    width: 100px;
+    height: 140px;
+    border-radius: 7px;
+    border-style: solid;
+    border-width: 1px;
+    display: grid;
+    grid-template-rows: 110px 30px;
+    cursor: pointer;
+}
+
+    .item-to-pick:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease-in-out;
+    }
+
+.item-to-pick-image-wrapper {
+    display: flex;
+    padding: 3px;
+    height: 100%;
+}
+
+    .item-to-pick-image-wrapper > img {
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+    }
+
+.item-to-pick-text {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
 }

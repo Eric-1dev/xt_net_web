@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UserAwards.DAL.Interfaces;
 using UserAwards.Entities;
@@ -61,12 +62,26 @@ namespace UserAwards.DAL.Files
         private IEnumerable<T> GetAllObjects<T>(string file)
         {
             var objects = new LinkedList<T>();
-            string[] text = File.ReadAllLines(WorkDirectory + file);
+            string[] text = null;
 
-            foreach (var line in text)
-                objects.AddLast(JsonConvert.DeserializeObject<T>(line));
+            int i = 0;
+            while (i < 5)
+            {
+                try
+                {
+                    text = File.ReadAllLines(WorkDirectory + file);
+                    foreach (var line in text)
+                        objects.AddLast(JsonConvert.DeserializeObject<T>(line));
 
-            return objects;
+                    return objects;
+                }
+                catch
+                {
+                    i++;
+                    Thread.Sleep(100);
+                }
+            }
+            return null;
         }
 
         private void SaveAllObjects<T>(IEnumerable<T> objects, string file)
@@ -74,8 +89,21 @@ namespace UserAwards.DAL.Files
             var text = new LinkedList<string>();
             foreach (var elem in objects)
                 text.AddLast(JsonConvert.SerializeObject(elem));
-            File.WriteAllLines(WorkDirectory + file, text.ToArray());
 
+            int i = 0;
+            while (i < 5)
+            {
+                try
+                {
+                    File.WriteAllLines(WorkDirectory + file, text.ToArray());
+                    return;
+                }
+                catch
+                {
+                    i++;
+                    Thread.Sleep(100);
+                }
+            }
         }
 
         private void AddObject<T>(T obj, string file) where T : IHasId
@@ -88,17 +116,6 @@ namespace UserAwards.DAL.Files
 
         private bool DeleteObjectById<T>(Guid id, string file) where T : IHasId
         {
-            /*var objects = new LinkedList<T>(GetAllObjects<T>(file));
-            var objToDelete = objects.Where(obj => obj.Id == id);
-            
-            if (objToDelete.Count() == 0)
-                return false;
-
-            objects.Remove(objToDelete.FirstOrDefault());
-
-            SaveAllObjects(objects, file);
-
-            return true;*/
             var list = new List<Guid>(1)
             {
                 id
