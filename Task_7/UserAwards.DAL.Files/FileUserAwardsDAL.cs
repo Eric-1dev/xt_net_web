@@ -58,6 +58,21 @@ namespace UserAwards.DAL.Files
         public Award GetAwardById(Guid id) => GetObjectById<Award>(id, AwardsFile);
 
         public Link GetLinkById(Guid id) => GetObjectById<Link>(id, LinksFile);
+        public IEnumerable<Award> GetAwardsByUserId(Guid Id)
+        {
+            var awardsId = GetAllLinks().Where(link => link.UserId == Id).Select(link => link.AwardId);
+            var awards = GetAllAwards();
+
+            return awards.Where(user => awardsId.Contains(user.Id));
+        }
+
+        public IEnumerable<User> GetUsersByAwardId(Guid Id)
+        {
+            var usersId = GetAllLinks().Where(link => link.AwardId == Id).Select(link => link.UserId);
+            var users = GetAllUsers();
+
+            return users.Where(user => usersId.Contains(user.Id));
+        }
 
         private IEnumerable<T> GetAllObjects<T>(string file)
         {

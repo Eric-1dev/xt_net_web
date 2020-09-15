@@ -29,9 +29,9 @@ namespace UserAwards.PL.Console
 
         public IEnumerable<User> GetAllUsers() => BLL.GetAllUsers();
 
-        public IEnumerable<User> GetUsersByAwardId(Guid awardId) => BLL.GetUsersByAward(awardId);
+        public IEnumerable<User> GetUsersByAwardId(Guid awardId) => BLL.GetUsersByAwardId(awardId);
 
-        public IEnumerable<Award> GetAwardsByUserId(Guid userId) => BLL.GetAwardsByUser(userId);
+        public IEnumerable<Award> GetAwardsByUserId(Guid userId) => BLL.GetAwardsByUserId(userId);
 
         public void ShowAllUsers()
         {

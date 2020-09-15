@@ -25,5 +25,7 @@ namespace UserAwards.DAL.Interfaces
         IEnumerable<User> GetAllUsers();
         IEnumerable<Award> GetAllAwards();
         IEnumerable<Link> GetAllLinks();
+        IEnumerable<Award> GetAwardsByUserId(Guid Id);
+        IEnumerable<User> GetUsersByAwardId(Guid Id);
     }
 }

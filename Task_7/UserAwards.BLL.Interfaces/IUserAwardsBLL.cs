@@ -21,7 +21,7 @@ namespace UserAwards.BLL.Interfaces
         void RemoveAwardFromUser(Guid userId, Guid awardId);
         IEnumerable<User> GetAllUsers();
         IEnumerable<Award> GetAllAwards();
-        IEnumerable<User> GetUsersByAward(Guid awardId);
-        IEnumerable<Award> GetAwardsByUser(Guid userId);
+        IEnumerable<User> GetUsersByAwardId(Guid awardId);
+        IEnumerable<Award> GetAwardsByUserId(Guid userId);
     }
 }

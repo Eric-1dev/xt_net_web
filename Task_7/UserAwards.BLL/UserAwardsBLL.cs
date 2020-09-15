@@ -46,23 +46,11 @@ namespace UserAwards.BLL
 
         public Award GetAwardById(Guid id) => DAL.GetAwardById(id);
 
-        public IEnumerable<Award> GetAwardsByUser(Guid userId)
-        {
-            var awardsId = DAL.GetAllLinks().Where(link => link.UserId == userId).Select(link => link.AwardId);
-            var awards = GetAllAwards();
-
-            return awards.Where(user => awardsId.Contains(user.Id));
-        }
+        public IEnumerable<Award> GetAwardsByUserId(Guid userId) => DAL.GetAwardsByUserId(userId);
 
         public User GetUserById(Guid id) => DAL.GetUserById(id);
 
-        public IEnumerable<User> GetUsersByAward(Guid awardId)
-        {
-            var usersId = DAL.GetAllLinks().Where(link => link.AwardId == awardId).Select(link => link.UserId);
-            var users = GetAllUsers();
-
-            return users.Where(user => usersId.Contains(user.Id));
-        }
+        public IEnumerable<User> GetUsersByAwardId(Guid awardId) => DAL.GetUsersByAwardId(awardId);
 
         public void RemoveAwardById(Guid id)
         {
