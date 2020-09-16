@@ -1,5 +1,13 @@
 ﻿@using UserAwards.PL.WEB.Modules
 @{
+    Layout = "~/_AuthLayout.cshtml";
+
+    if (!User.IsInRole("admin"))
+    {
+        Response.Write("У вас нет прав на редактирование");
+        return;
+    }
+
     var WebPL = new WebUserAwardsPL();
 
     var type = Request["Type"];

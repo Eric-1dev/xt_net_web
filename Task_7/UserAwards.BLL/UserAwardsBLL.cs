@@ -46,12 +46,7 @@ namespace UserAwards.BLL
         public IEnumerable<User> GetAllUsers() => DAL.GetAllUsers();
 
         public Award GetAwardById(Guid id) => DAL.GetAwardById(id);
-        public void SetUserPassword(Guid id, string password)
-        {
-            var user = GetUserById(id);
-            user.Password = password;
-            UpdateUserById(id, user);
-        }
+        public void SetUserPassword(Guid id, string password) => DAL.SetUserPassword(id, password);
 
         public IEnumerable<Award> GetAwardsByUserId(Guid userId) => DAL.GetAwardsByUserId(userId);
 
@@ -100,12 +95,14 @@ namespace UserAwards.BLL
 
         public bool UpdateUserById(Guid id, User user)
         {
-            var users = GetAllUsers();
+            var user_old = GetUserById(id);
 
-            if (!users.Where(usr => usr.Id == id).Any())
+            if (user_old == null)
                 return false;
 
             user.Id = id;
+            user.Password = user_old.Password;
+
             DAL.UpdateUser(user);
 
             return true;
@@ -139,5 +136,9 @@ namespace UserAwards.BLL
         }
 
         public bool IsAccountExist(string name, string password) => DAL.IsAccountExist(name, password);
+
+        public string[] GetRolesForUser(string name) => DAL.GetRolesForUser(name);
+
+        public bool IsUserInRole(string name, string role) => DAL.IsUserInRole(name, role);
     }
 }

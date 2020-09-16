@@ -1,7 +1,8 @@
 ﻿@using UserAwards.PL.WEB.Modules
 @using UserAwards.Entities
-@using System.Text.RegularExpressions
 @{
+    Layout = "~/_AuthLayout.cshtml";
+
     var WebPL = new WebUserAwardsPL();
 
     string type = Request["Type"];
@@ -10,6 +11,12 @@
     Guid.TryParse(Request["Id"], out id);
 
     string name = Request["Name"];
+
+    if (!User.IsInRole("admin") && (User.Identity.Name != name))
+    {
+        Response.Write("У вас нет прав на редактирование");
+        return;
+    }
 
     string image = Request["Image"];
     if (image.Length == 0)
@@ -34,7 +41,7 @@
         int age;
         int.TryParse(Request["Age"].ToString(), out age);
 
-        var user = new User(name, birthDay, age, image);
+        var user = new User(name, birthDay, age, false, image);
         // Проверки на корректность
         switch (WebPL.UserCorrectionCheck(user))
         {

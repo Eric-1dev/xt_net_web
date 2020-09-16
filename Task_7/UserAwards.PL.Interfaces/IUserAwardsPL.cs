@@ -27,5 +27,7 @@ namespace UserAwards.PL.Interfaces
         UserCheckStatus UserCorrectionCheck(User user);
         AwardCheckStatus AwardCorrectionCheck(Award award);
         bool IsAccountExist(string name, string password);
+        string[] GetRolesForUser(string name);
+        bool IsUserInRole(string name, string role);
     }
 }

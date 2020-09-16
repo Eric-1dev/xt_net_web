@@ -7,8 +7,10 @@
     var password = Request["Password"];
     var bithDay = new DateTime(1900, 1, 1);
     int age = 0;
+    bool isAdmin;
+    bool.TryParse(Request["IsAdmin"], out isAdmin);
 
-    var user = new User(name, bithDay, age);
+    var user = new User(name, bithDay, age, isAdmin);
 
     if (WebPL.UserCorrectionCheck(user) == UserCheckStatus.ALLREADY_EXIST)
     {

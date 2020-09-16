@@ -1,5 +1,7 @@
 ﻿@using UserAwards.PL.WEB.Modules
 @{
+    Layout = "~/_AuthLayout.cshtml";
+
     var WebPL = new WebUserAwardsPL();
     var users = WebPL.GetAllUsers();
 

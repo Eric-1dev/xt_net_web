@@ -1,8 +1,7 @@
 ﻿@{
     if (!User.Identity.IsAuthenticated)
     {
-        Response.Redirect("~/login");
+        Response.Redirect("/login");
     }
+    @RenderBody();
 }
-
-@RenderBody()

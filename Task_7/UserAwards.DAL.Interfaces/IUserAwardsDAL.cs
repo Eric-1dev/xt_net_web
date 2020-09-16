@@ -30,5 +30,8 @@ namespace UserAwards.DAL.Interfaces
         IEnumerable<Award> GetAwardsByUserId(Guid Id);
         IEnumerable<User> GetUsersByAwardId(Guid Id);
         bool IsAccountExist(string name, string password);
+        string[] GetRolesForUser(string name);
+        bool IsUserInRole(string name, string role);
+        void SetUserPassword(Guid id, string password);
     }
 }

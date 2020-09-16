@@ -56,6 +56,37 @@ namespace UserAwards.DAL.Files
         public User GetUserById(Guid id) => GetObjectById<User>(id, UsersFile);
         
         public User GetUserByName(string name) => GetAllUsers().Where(user => user.Name == name).FirstOrDefault();
+        
+        public string[] GetRolesForUser(string name)
+        {
+            var user = GetUserByName(name);
+            if (user == null)
+                return null;
+
+            string[] roles = { "user" };
+            if (user.IsAdmin)
+                return roles.Append("admin").ToArray();
+            return roles;
+        }
+
+        public bool IsUserInRole(string name, string role)
+        {
+            var user = GetUserByName(name);
+            if (user == null)
+                return false;
+            if (role == "user")
+                return true;
+            if (role == "admin" && user.IsAdmin)
+                return true;
+            return false;
+        }
+
+        public void SetUserPassword(Guid id, string password)
+        {
+            var user = GetUserById(id);
+            user.Password = password;
+            UpdateUser(user);
+        }
 
         public Award GetAwardById(Guid id) => GetObjectById<Award>(id, AwardsFile);
 

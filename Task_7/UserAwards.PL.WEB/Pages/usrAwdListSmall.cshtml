@@ -2,6 +2,8 @@
 @using UserAwards.Entities
 @using System.Linq
 @{
+    Layout = "~/_AuthLayout.cshtml";
+
     var WebPL = new WebUserAwardsPL();
 
     var type = Request["Type"];

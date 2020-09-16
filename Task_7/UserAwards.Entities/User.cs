@@ -13,6 +13,7 @@ namespace UserAwards.Entities
         public string Password { get; set; }
         public DateTime DateOfBirth { get; private set; }
         public int Age { get; private set; }
+        public bool IsAdmin { get; set; }
         public string Image { get; set; }
 
         private User()
@@ -20,11 +21,12 @@ namespace UserAwards.Entities
             Id = Guid.NewGuid();
         }
 
-        public User(string name, DateTime dateOfBirth, int age, string image = null) : this()
+        public User(string name, DateTime dateOfBirth, int age, bool isAdmin = false, string image = null) : this()
         {
             Name = name;
             DateOfBirth = dateOfBirth;
             Age = age;
+            IsAdmin = isAdmin;
             Image = image;
         }
     }

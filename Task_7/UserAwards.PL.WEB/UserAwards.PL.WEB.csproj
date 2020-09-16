@@ -226,6 +226,7 @@
     <Content Include="_AuthLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\SimpleRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WebUserAwardsPL.cs" />
   </ItemGroup>

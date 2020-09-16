@@ -50,5 +50,8 @@ namespace UserAwards.PL.WEB.Modules
         public AwardCheckStatus AwardCorrectionCheck(Award award) => BLL.AwardCorrectionCheck(award);
 
         public bool IsAccountExist(string name, string password) => BLL.IsAccountExist(name, password);
+        public string[] GetRolesForUser(string name) => BLL.GetRolesForUser(name);
+
+        public bool IsUserInRole(string name, string role) => BLL.IsUserInRole(name, role);
     }
 }
