@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UserAwards.BLL.Interfaces;
 using UserAwards.DAL.DR;
@@ -45,6 +46,12 @@ namespace UserAwards.BLL
         public IEnumerable<User> GetAllUsers() => DAL.GetAllUsers();
 
         public Award GetAwardById(Guid id) => DAL.GetAwardById(id);
+        public void SetUserPassword(Guid id, string password)
+        {
+            var user = GetUserById(id);
+            user.Password = password;
+            UpdateUserById(id, user);
+        }
 
         public IEnumerable<Award> GetAwardsByUserId(Guid userId) => DAL.GetAwardsByUserId(userId);
 
@@ -103,5 +110,34 @@ namespace UserAwards.BLL
 
             return true;
         }
+
+        public UserCheckStatus UserCorrectionCheck(User user)
+        {
+            string nameCheck = @"[a-zA-Z0-9_\-]{3,}";
+            if (!Regex.IsMatch(user.Name, nameCheck))
+                return UserCheckStatus.INCORRECT_NAME;
+
+            if (DAL.GetUserByName(user.Name) != null)
+                return UserCheckStatus.ALLREADY_EXIST;
+
+            if (user.Age > 150 || user.Age < 0)
+                return UserCheckStatus.INCORRECT_AGE;
+
+            return UserCheckStatus.CORRECT;
+        }
+
+        public AwardCheckStatus AwardCorrectionCheck(Award award)
+        {
+            string titleCheck = @"[a-zA-Zа-яА-ЯёЁ0-9_\-\s]{3,}";
+            if (!Regex.IsMatch(award.Title, titleCheck))
+                return AwardCheckStatus.INCORRECT_TITLE;
+
+            if (DAL.GetAwardByTitle(award.Title) != null)
+                return AwardCheckStatus.ALLREADY_EXIST;
+
+            return AwardCheckStatus.CORRECT;
+        }
+
+        public bool IsAccountExist(string name, string password) => DAL.IsAccountExist(name, password);
     }
 }

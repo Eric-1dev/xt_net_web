@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/_AuthLayout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -13,6 +13,10 @@
     <script src="~/JS/Common.js"></script>
 </head>
 <body>
+    <div class="fixed-top text-right">
+        <span class="text-info">Привет, @User.Identity.Name</span>
+        <button class="btn-sm btn-info" id="logoutButton">Выход</button>
+    </div>
     @RenderBody()
 </body>
 </html>

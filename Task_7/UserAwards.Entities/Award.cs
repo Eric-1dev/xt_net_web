@@ -23,4 +23,11 @@ namespace UserAwards.Entities
             Image = image;
         }
     }
+    public enum AwardCheckStatus
+    {
+        NULL,
+        CORRECT,
+        ALLREADY_EXIST,
+        INCORRECT_TITLE
+    }
 }

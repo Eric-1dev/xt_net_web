@@ -101,6 +101,8 @@
     <Content Include="Images\no_award_image.png" />
     <Content Include="Images\plus.png" />
     <Content Include="JS\Common.js" />
+    <Content Include="JS\jquery.md5.js" />
+    <Content Include="JS\Login.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -131,11 +133,14 @@
     <Content Include="Pages\itemSave.cshtml" />
     <Content Include="Pages\itemDelete.cshtml" />
     <Content Include="Pages\usrAwdListModal.cshtml" />
-    <Content Include="Pages\usersListModal.cshtml" />
     <Content Include="Pages\_modalListItemsToAdd.cshtml" />
     <Content Include="Pages\usrAwdListSmall.cshtml" />
     <Content Include="Pages\addLink.cshtml" />
     <Content Include="Pages\deleteLink.cshtml" />
+    <Content Include="login.cshtml" />
+    <Content Include="logout.cshtml" />
+    <Content Include="Pages\loginLogic.cshtml" />
+    <Content Include="Pages\registerLogic.cshtml" />
     <None Include="Pages\_addButtonPartial.cshtml" />
     <Content Include="Pages\_modalItemEditPartial.cshtml" />
     <Content Include="Pages\_toast.cshtml" />
@@ -217,7 +222,8 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Web.config" />
-    <Content Include="_Layout.cshtml" />
+    <Content Include="_HeaderLayout.cshtml" />
+    <Content Include="_AuthLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

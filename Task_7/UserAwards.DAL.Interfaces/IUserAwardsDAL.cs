@@ -13,7 +13,9 @@ namespace UserAwards.DAL.Interfaces
         void InsertAward(Award award);
         void InsertLink(Link link);
         User GetUserById(Guid id);
+        User GetUserByName(string name);
         Award GetAwardById(Guid id);
+        Award GetAwardByTitle(string title);
         Link GetLinkById(Guid id);
         bool UpdateUser(User user);
         bool UpdateAward(Award award);
@@ -27,5 +29,6 @@ namespace UserAwards.DAL.Interfaces
         IEnumerable<Link> GetAllLinks();
         IEnumerable<Award> GetAwardsByUserId(Guid Id);
         IEnumerable<User> GetUsersByAwardId(Guid Id);
+        bool IsAccountExist(string name, string password);
     }
 }

@@ -1,0 +1,20 @@
+﻿@using UserAwards.PL.WEB.Modules
+@using UserAwards.Entities
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    var name = Request["Login"];
+    var password = Request["Password"];
+    var bithDay = new DateTime(1900, 1, 1);
+    int age = 0;
+
+    var user = new User(name, bithDay, age);
+
+    if (WebPL.UserCorrectionCheck(user) == UserCheckStatus.ALLREADY_EXIST)
+    {
+        Response.Write("Пользователь с таким именем уже существует");
+        return;
+    }
+    WebPL.AddUser(user);
+    WebPL.SetUserPassword(user.Id, password);
+}

@@ -9,6 +9,7 @@ function onReady() {
     $('#modal_file').change(UploadImage);
     $('#modal_save').click(ItemSave);
     $('.modal_list_plus').click(AddLink);
+    $('#logoutButton').click(Logout);
 }
 
 function ShowMessage(data) {
@@ -300,4 +301,8 @@ function GetUsrAwdListModal(id, type) {
             $('#modal_user_awards').html(data);
             $('.modal_list_delete').click(DeleteLink);
         });
+}
+
+function Logout() {
+    window.location.href = "logout.cshtml";
 }

@@ -18,9 +18,9 @@ namespace UserAwards.PL.WEB.Modules
 
         public void AddUser(User user) => BLL.AddUser(user);
 
-        public void ChangeAwardById(Guid id, Award award) => BLL.UpdateAwardById(id, award);
-
         public void ChangeUserById(Guid id, User user) => BLL.UpdateUserById(id, user);
+
+        public void ChangeAwardById(Guid id, Award award) => BLL.UpdateAwardById(id, award);
 
         public IEnumerable<Award> GetAllAwards() => BLL.GetAllAwards();
 
@@ -39,5 +39,16 @@ namespace UserAwards.PL.WEB.Modules
         public void RemoveAwardFromUser(Guid userId, Guid awardId) => BLL.RemoveAwardFromUser(userId, awardId);
 
         public void RemoveUserById(Guid id) => BLL.RemoveUserById(id);
+
+        public UserCheckStatus UserCheck(User user) => BLL.UserCorrectionCheck(user);
+        public AwardCheckStatus AwardCheck(Award award) => BLL.AwardCorrectionCheck(award);
+
+        public void SetUserPassword(Guid id, string password) => BLL.SetUserPassword(id, password);
+
+        public UserCheckStatus UserCorrectionCheck(User user) => BLL.UserCorrectionCheck(user);
+
+        public AwardCheckStatus AwardCorrectionCheck(Award award) => BLL.AwardCorrectionCheck(award);
+
+        public bool IsAccountExist(string name, string password) => BLL.IsAccountExist(name, password);
     }
 }

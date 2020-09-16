@@ -10,6 +10,7 @@ namespace UserAwards.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; private set; }
+        public string Password { get; set; }
         public DateTime DateOfBirth { get; private set; }
         public int Age { get; private set; }
         public string Image { get; set; }
@@ -26,5 +27,15 @@ namespace UserAwards.Entities
             Age = age;
             Image = image;
         }
+    }
+
+    public enum UserCheckStatus
+    {
+        NULL,
+        CORRECT,
+        INCORRECT_NAME,
+        ALLREADY_EXIST,
+        INCORRECT_AGE,
+        INCORRECT_DATEOFBIRTH
     }
 }

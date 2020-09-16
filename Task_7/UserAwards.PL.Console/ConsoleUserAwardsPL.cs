@@ -75,5 +75,13 @@ namespace UserAwards.PL.Console
         public User GetUserById(Guid id) => BLL.GetUserById(id);
 
         public Award GetAwardById(Guid id) => BLL.GetAwardById(id);
+
+        public void SetUserPassword(Guid id, string password) => BLL.SetUserPassword(id, password);
+
+        public UserCheckStatus UserCorrectionCheck(User user) => BLL.UserCorrectionCheck(user);
+
+        public AwardCheckStatus AwardCorrectionCheck(Award award) => BLL.AwardCorrectionCheck(award);
+
+        public bool IsAccountExist(string name, string password) => BLL.IsAccountExist(name, password);
     }
 }

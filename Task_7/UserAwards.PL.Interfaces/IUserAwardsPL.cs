@@ -13,6 +13,7 @@ namespace UserAwards.PL.Interfaces
         void RemoveUserById(Guid id);
         void ChangeUserById(Guid id, User user);
         User GetUserById(Guid id);
+        void SetUserPassword(Guid id, string password);
         void AddAward(Award award);
         void RemoveAwardById(Guid id);
         void ChangeAwardById(Guid id, Award award);
@@ -23,5 +24,8 @@ namespace UserAwards.PL.Interfaces
         IEnumerable<Award> GetAllAwards();
         IEnumerable<User> GetUsersByAwardId(Guid awardId);
         IEnumerable<Award> GetAwardsByUserId(Guid userId);
+        UserCheckStatus UserCorrectionCheck(User user);
+        AwardCheckStatus AwardCorrectionCheck(Award award);
+        bool IsAccountExist(string name, string password);
     }
 }

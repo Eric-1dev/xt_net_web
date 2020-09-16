@@ -54,8 +54,12 @@ namespace UserAwards.DAL.Files
         public bool UpdateLink(Link link) => UpdateObject(link, LinksFile);
 
         public User GetUserById(Guid id) => GetObjectById<User>(id, UsersFile);
+        
+        public User GetUserByName(string name) => GetAllUsers().Where(user => user.Name == name).FirstOrDefault();
 
         public Award GetAwardById(Guid id) => GetObjectById<Award>(id, AwardsFile);
+
+        public Award GetAwardByTitle(string title) => GetAllAwards().Where(award => award.Title == title).FirstOrDefault();
 
         public Link GetLinkById(Guid id) => GetObjectById<Link>(id, LinksFile);
         public IEnumerable<Award> GetAwardsByUserId(Guid Id)
@@ -176,5 +180,7 @@ namespace UserAwards.DAL.Files
 
             return findedObj.FirstOrDefault();
         }
+
+        public bool IsAccountExist(string name, string password) => GetAllUsers().Where(user => user.Name == name && user.Password == password).Any();
     }
 }

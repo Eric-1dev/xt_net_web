@@ -1,0 +1,16 @@
+﻿@using UserAwards.PL.WEB.Modules
+@{
+    var WebPL = new WebUserAwardsPL();
+
+    var name = Request["Login"];
+    var password = Request["Password"];
+
+    if (WebPL.IsAccountExist(name, password))
+    {
+        FormsAuthentication.SetAuthCookie(name, createPersistentCookie: true);
+    }
+    else
+    {
+        Response.Write("Некорректное имя пользователя или пароль.");
+    }
+}
