@@ -38,15 +38,24 @@
         int.TryParse(dateArr[2], out day);
 
         var birthDay = new DateTime(year, mount, day);
+
         int age;
         int.TryParse(Request["Age"].ToString(), out age);
 
+        var password = Request["Password"];
+
         var user = new User(name, birthDay, age, false, image);
+
+        if (password != "")
+        {
+            WebPL.SetUserPassword(user.Id, password);
+        }
+
         // Проверки на корректность
         switch (WebPL.UserCorrectionCheck(user))
         {
             case UserCheckStatus.INCORRECT_NAME:
-                Response.Write("Некорректное имя пользователя. Название должно быть длинее 2 символов.");
+                Response.Write("Некорректное имя пользователя. Имя должно быть длинной 2-20 символов и состоять из символов английского алфавита, цифр, знаков '_' и '-'.");
                 return;
             case UserCheckStatus.INCORRECT_DATEOFBIRTH:
                 Response.Write("Некорректная дата рождения");

@@ -28,6 +28,7 @@ namespace UserAwards.Entities
             Age = age;
             IsAdmin = isAdmin;
             Image = image;
+            Password = null;
         }
     }
 

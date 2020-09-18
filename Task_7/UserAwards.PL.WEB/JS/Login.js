@@ -25,9 +25,6 @@ function Registration() {
             Password: $.md5($('#password').val()),
             IsAdmin: $('#is_admin').prop('checked')
         }, function (data) {
-            if (data == "")
-                $('#result').html("Успешно зарегистрирован. Войдите под своим паролем.")
-            else
-                $('#result').html(data);
+            $('#result').html(data);
         });
 }

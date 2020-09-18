@@ -168,13 +168,17 @@ function ItemSave() {
     if (type == "user") {
         let birthday = $('#modal_birthday').val();
         let age = $('#modal_age').val();
+        let password = $('#modal_pass').val();
+
         image = $('#modal_user_image').attr('src');
+        
         if (image == no_avatar)
             image = null;
         name = $('#modal_user_name').val();
 
         data.DateOfBirth = birthday;
         data.Age = age;
+        data.Password = password;
         data.Image = image;
     }
     else {

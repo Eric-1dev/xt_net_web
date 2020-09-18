@@ -13,11 +13,11 @@ namespace UserAwards.PL.Console
     class ConsoleUserAwardsPL : IUserAwardsPL
     {
         private readonly IUserAwardsBLL BLL = UserAwardsBLLDR.UserAwardsBLL;
-        public void AddAward(Award award) => BLL.AddAward(award);
+        public AwardCheckStatus AddAward(Award award) => BLL.AddAward(award);
 
         public void AddAwardToUser(Guid userId, Guid awardId) => BLL.AddAwardToUser(userId, awardId);
 
-        public void AddUser(User user) => BLL.AddUser(user);
+        public UserCheckStatus AddUser(User user) => BLL.AddUser(user);
 
         public void RemoveAwardById(Guid id) => BLL.RemoveAwardById(id);
 
@@ -73,10 +73,11 @@ namespace UserAwards.PL.Console
         public void ChangeAwardById(Guid id, Award award) => BLL.UpdateAwardById(id, award);
 
         public User GetUserById(Guid id) => BLL.GetUserById(id);
+        public User GetUserByName(string name) => BLL.GetUserByName(name);
 
         public Award GetAwardById(Guid id) => BLL.GetAwardById(id);
 
-        public void SetUserPassword(Guid id, string password) => BLL.SetUserPassword(id, password);
+        public bool SetUserPassword(Guid id, string password) => BLL.SetUserPassword(id, password);
 
         public UserCheckStatus UserCorrectionCheck(User user) => BLL.UserCorrectionCheck(user);
 

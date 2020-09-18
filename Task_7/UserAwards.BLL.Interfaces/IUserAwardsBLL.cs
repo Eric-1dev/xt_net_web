@@ -9,12 +9,13 @@ namespace UserAwards.BLL.Interfaces
 {
     public interface IUserAwardsBLL
     {
-        void AddUser(User user);
+        UserCheckStatus AddUser(User user);
         void RemoveUserById(Guid id);
         bool UpdateUserById(Guid id, User user);
         User GetUserById(Guid id);
-        void SetUserPassword(Guid id, string password);
-        void AddAward(Award award);
+        User GetUserByName(string name);
+        bool SetUserPassword(Guid id, string password);
+        AwardCheckStatus AddAward(Award award);
         void RemoveAwardById(Guid id);
         bool UpdateAwardById(Guid id, Award award);
         Award GetAwardById(Guid id);

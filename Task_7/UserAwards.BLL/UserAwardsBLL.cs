@@ -16,7 +16,13 @@ namespace UserAwards.BLL
     public class UserAwardsBLL : IUserAwardsBLL
     {
         private readonly IUserAwardsDAL DAL = UserAwardsDALDR.UserAwardsDAL;
-        public void AddAward(Award award) => DAL.InsertAward(award);
+        public AwardCheckStatus AddAward(Award award)
+        {
+            var checkResult = AwardCorrectionCheck(award);
+            if (checkResult == AwardCheckStatus.CORRECT)
+                DAL.InsertAward(award);
+            return checkResult;
+        }
 
         public bool AddAwardToUser(Guid userId, Guid awardId)
         {
@@ -39,18 +45,26 @@ namespace UserAwards.BLL
             return true;
         }
 
-        public void AddUser(User user) => DAL.InsertUser(user);
+        public UserCheckStatus AddUser(User user)
+        {
+            var checkResult = UserCorrectionCheck(user);
+            if (checkResult == UserCheckStatus.CORRECT)
+                DAL.InsertUser(user);
+            return checkResult;
+        }
 
         public IEnumerable<Award> GetAllAwards() => DAL.GetAllAwards();
 
         public IEnumerable<User> GetAllUsers() => DAL.GetAllUsers();
 
         public Award GetAwardById(Guid id) => DAL.GetAwardById(id);
-        public void SetUserPassword(Guid id, string password) => DAL.SetUserPassword(id, password);
+
+        public bool SetUserPassword(Guid id, string password) => DAL.SetUserPassword(id, password);
 
         public IEnumerable<Award> GetAwardsByUserId(Guid userId) => DAL.GetAwardsByUserId(userId);
 
         public User GetUserById(Guid id) => DAL.GetUserById(id);
+        public User GetUserByName(string name) => DAL.GetUserByName(name);
 
         public IEnumerable<User> GetUsersByAwardId(Guid awardId) => DAL.GetUsersByAwardId(awardId);
 
@@ -110,7 +124,7 @@ namespace UserAwards.BLL
 
         public UserCheckStatus UserCorrectionCheck(User user)
         {
-            string nameCheck = @"[a-zA-Z0-9_\-]{3,}";
+            string nameCheck = @"^[a-zA-Z0-9_\-]{3,20}$";
             if (!Regex.IsMatch(user.Name, nameCheck))
                 return UserCheckStatus.INCORRECT_NAME;
 
@@ -125,7 +139,7 @@ namespace UserAwards.BLL
 
         public AwardCheckStatus AwardCorrectionCheck(Award award)
         {
-            string titleCheck = @"[a-zA-Zа-яА-ЯёЁ0-9_\-\s]{3,}";
+            string titleCheck = @"[a-zA-Zа-яА-ЯёЁ0-9_\-\s]{3,30}";
             if (!Regex.IsMatch(award.Title, titleCheck))
                 return AwardCheckStatus.INCORRECT_TITLE;
 

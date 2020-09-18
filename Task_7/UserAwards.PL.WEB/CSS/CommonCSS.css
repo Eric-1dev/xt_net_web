@@ -70,6 +70,10 @@ body {
     margin: auto;
 }
 
+.modal_row {
+    align-items: center;
+}
+
 .modal_div_image {
     display: flex;
     width: 140px;

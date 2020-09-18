@@ -32,6 +32,6 @@ namespace UserAwards.DAL.Interfaces
         bool IsAccountExist(string name, string password);
         string[] GetRolesForUser(string name);
         bool IsUserInRole(string name, string role);
-        void SetUserPassword(Guid id, string password);
+        bool SetUserPassword(Guid id, string password);
     }
 }

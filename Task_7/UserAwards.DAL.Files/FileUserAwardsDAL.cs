@@ -81,11 +81,16 @@ namespace UserAwards.DAL.Files
             return false;
         }
 
-        public void SetUserPassword(Guid id, string password)
+        public bool SetUserPassword(Guid id, string password)
         {
             var user = GetUserById(id);
-            user.Password = password;
-            UpdateUser(user);
+            if (user != null)
+            {
+                user.Password = password;
+                UpdateUser(user);
+                return true;
+            }
+            return false;
         }
 
         public Award GetAwardById(Guid id) => GetObjectById<Award>(id, AwardsFile);

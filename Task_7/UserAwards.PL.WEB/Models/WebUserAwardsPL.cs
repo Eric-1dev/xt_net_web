@@ -12,11 +12,11 @@ namespace UserAwards.PL.WEB.Modules
     public class WebUserAwardsPL : IUserAwardsPL
     {
         private readonly IUserAwardsBLL BLL = UserAwardsBLLDR.UserAwardsBLL;
-        public void AddAward(Award award) => BLL.AddAward(award);
+        public AwardCheckStatus AddAward(Award award) => BLL.AddAward(award);
 
         public void AddAwardToUser(Guid userId, Guid awardId) => BLL.AddAwardToUser(userId, awardId);
 
-        public void AddUser(User user) => BLL.AddUser(user);
+        public UserCheckStatus AddUser(User user) => BLL.AddUser(user);
 
         public void ChangeUserById(Guid id, User user) => BLL.UpdateUserById(id, user);
 
@@ -31,6 +31,7 @@ namespace UserAwards.PL.WEB.Modules
         public IEnumerable<Award> GetAwardsByUserId(Guid userId) => BLL.GetAwardsByUserId(userId);
 
         public User GetUserById(Guid id) => BLL.GetUserById(id);
+        public User GetUserByName(string name) => BLL.GetUserByName(name);
 
         public IEnumerable<User> GetUsersByAwardId(Guid awardId) => BLL.GetUsersByAwardId(awardId);
 
@@ -43,7 +44,7 @@ namespace UserAwards.PL.WEB.Modules
         public UserCheckStatus UserCheck(User user) => BLL.UserCorrectionCheck(user);
         public AwardCheckStatus AwardCheck(Award award) => BLL.AwardCorrectionCheck(award);
 
-        public void SetUserPassword(Guid id, string password) => BLL.SetUserPassword(id, password);
+        public bool SetUserPassword(Guid id, string password) => BLL.SetUserPassword(id, password);
 
         public UserCheckStatus UserCorrectionCheck(User user) => BLL.UserCorrectionCheck(user);
 
