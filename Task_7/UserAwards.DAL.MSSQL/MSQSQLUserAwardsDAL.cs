@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using UserAwards.DAL.Interfaces;
@@ -10,6 +15,16 @@ namespace UserAwards.DAL.MSSQL
 {
     public class MSQSQLUserAwardsDAL : IUserAwardsDAL
     {
+        private string _connectionString = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
+        private SqlConnection _connection;
+        private SqlConnection Connection
+        {
+            get
+            {
+                _connection = _connection ?? new SqlConnection(_connectionString);
+                return _connection;
+            }
+        }
         public bool DeleteAwardById(Guid id)
         {
             throw new NotImplementedException();
@@ -92,7 +107,7 @@ namespace UserAwards.DAL.MSSQL
 
         public void InsertUser(User user)
         {
-            throw new NotImplementedException();
+            
         }
 
         public bool IsAccountExist(string name, string password)
