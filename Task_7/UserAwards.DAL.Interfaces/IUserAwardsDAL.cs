@@ -16,10 +16,8 @@ namespace UserAwards.DAL.Interfaces
         User GetUserByName(string name);
         Award GetAwardById(Guid id);
         Award GetAwardByTitle(string title);
-        Link GetLinkById(Guid id);
         bool UpdateUser(User user);
         bool UpdateAward(Award award);
-        bool UpdateLink(Link link);
         bool DeleteUserById(Guid id);
         bool DeleteAwardById(Guid id);
         bool DeleteLinkById(Guid id);

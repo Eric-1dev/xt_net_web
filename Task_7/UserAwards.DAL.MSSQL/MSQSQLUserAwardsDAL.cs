@@ -60,11 +60,6 @@ namespace UserAwards.DAL.MSSQL
             throw new NotImplementedException();
         }
 
-        public Link GetLinkById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public string[] GetRolesForUser(string name)
         {
             throw new NotImplementedException();
@@ -116,11 +111,6 @@ namespace UserAwards.DAL.MSSQL
         }
 
         public bool UpdateAward(Award award)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateLink(Link link)
         {
             throw new NotImplementedException();
         }

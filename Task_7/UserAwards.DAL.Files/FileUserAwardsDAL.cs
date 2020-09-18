@@ -51,8 +51,6 @@ namespace UserAwards.DAL.Files
 
         public bool UpdateAward(Award award) => UpdateObject(award, AwardsFile);
 
-        public bool UpdateLink(Link link) => UpdateObject(link, LinksFile);
-
         public User GetUserById(Guid id) => GetObjectById<User>(id, UsersFile);
         
         public User GetUserByName(string name) => GetAllUsers().Where(user => user.Name == name).FirstOrDefault();
@@ -97,7 +95,6 @@ namespace UserAwards.DAL.Files
 
         public Award GetAwardByTitle(string title) => GetAllAwards().Where(award => award.Title == title).FirstOrDefault();
 
-        public Link GetLinkById(Guid id) => GetObjectById<Link>(id, LinksFile);
         public IEnumerable<Award> GetAwardsByUserId(Guid Id)
         {
             var awardsId = GetAllLinks().Where(link => link.UserId == Id).Select(link => link.AwardId);
