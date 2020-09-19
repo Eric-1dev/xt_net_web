@@ -57,14 +57,15 @@ namespace UserAwards.DAL.Files
         
         public string[] GetRolesForUser(string name)
         {
+            var roles = new LinkedList<string>();
             var user = GetUserByName(name);
             if (user == null)
-                return null;
+                return roles.ToArray();
 
-            string[] roles = { "user" };
+            roles.AddLast("user");
             if (user.IsAdmin)
                 return roles.Append("admin").ToArray();
-            return roles;
+            return roles.ToArray();
         }
 
         public bool IsUserInRole(string name, string role)

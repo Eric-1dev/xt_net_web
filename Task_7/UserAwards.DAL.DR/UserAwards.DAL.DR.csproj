@@ -53,6 +53,10 @@
       <Project>{7D685440-AD3B-4AB6-810F-A53D9CEA18C9}</Project>
       <Name>UserAwards.DAL.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UserAwards.DAL.MSSQL\UserAwards.DAL.MSSQL.csproj">
+      <Project>{7538C261-FA3C-4117-92EA-FE9C9518AC6A}</Project>
+      <Name>UserAwards.DAL.MSSQL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

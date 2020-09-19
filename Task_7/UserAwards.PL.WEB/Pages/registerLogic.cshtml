@@ -28,7 +28,7 @@
             return;
         case UserCheckStatus.CORRECT:
             WebPL.SetUserPassword(user.Id, password);
-            Response.Write("Успешно зарегистрирован.Войдите под своим паролем.");
+            Response.Write("Успешно зарегистрирован. Войдите под своим паролем.");
             return;
         default:
             Response.Write("Некорректное имя пользователя. Имя должно быть длинной 2-20 символов и состоять из символов английского алфавита, цифр, знаков '_' и '-'.");

@@ -116,6 +116,7 @@ namespace UserAwards.BLL
 
             user.Id = id;
             user.Password = user_old.Password;
+            user.IsAdmin = user_old.IsAdmin;
 
             DAL.UpdateUser(user);
 
