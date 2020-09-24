@@ -379,7 +379,7 @@ namespace UserAwards.DAL.MSSQL
 
         public bool IsUserInRole(string name, string role)
         {
-            string stProc = "UserAwards_InsertUser";
+            string stProc = "UserAwards_IsUserInRole";
             var param = new KeyValuePair<string, object>[]
             {
                 new KeyValuePair<string, object>("@Name", name),
